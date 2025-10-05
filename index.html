@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCal - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="EasyCal Logo" class="logo">
+                <h1>EasyCal</h1>
+                <p class="tagline">Multi-Tool Calculation Platform</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        placeholder="Enter your phone number" 
+                        required
+                        pattern="[0-9]{10,11}"
+                        title="Enter 10-11 digit phone number"
+                    >
+                    <span class="error-message" id="phoneError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Enter your password" 
+                        required
+                        minlength="4"
+                    >
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">Login</span>
+                    <span class="btn-loading" style="display: none;">Logging in...</span>
+                </button>
+
+                <!-- Admin Note -->
+                <div class="admin-note">
+                    <p>📱 <strong>Admin Access:</strong> Use specific admin phone numbers</p>
+                </div>
+            </form>
+
+            <!-- Demo Credentials -->
+            <div class="demo-credentials">
+                <h3>Demo Access:</h3>
+                <div class="credential-item">
+                    <strong>User:</strong> 0123456789 | <strong>Pass:</strong> 1234
+                </div>
+                <div class="credential-item">
+                    <strong>Admin:</strong> 0111111111 | <strong>Pass:</strong> admin123
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="login-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EasyCal. All rights reserved. | Multi-Tool Calculation Platform</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a> | 
+                <a href="#">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/auth.js"></script>
+</body>
+</html>
