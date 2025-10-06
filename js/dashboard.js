@@ -1,4 +1,4 @@
-// Dashboard Functionality for EasyCal
+// Dashboard Functionality for EasyCal - UPDATED
 
 class Dashboard {
     constructor() {
@@ -54,15 +54,20 @@ class Dashboard {
     // Setup event listeners
     setupEventListeners() {
         // Logout button
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            this.logout();
-        });
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                this.logout();
+            });
+        }
 
         // Iframe load event
         const toolFrame = document.getElementById('toolFrame');
-        toolFrame.addEventListener('load', () => {
-            this.updateToolInfo();
-        });
+        if (toolFrame) {
+            toolFrame.addEventListener('load', () => {
+                this.updateToolInfo();
+            });
+        }
 
         // Handle browser back/forward buttons
         window.addEventListener('popstate', (event) => {
@@ -125,6 +130,8 @@ class Dashboard {
         const toolTitle = document.getElementById('toolTitle');
         const toolDescription = document.getElementById('toolDescription');
         
+        if (!toolFrame || !toolTitle || !toolDescription) return;
+        
         // Show loading state
         toolTitle.textContent = 'Loading...';
         toolDescription.textContent = 'Please wait while the tool loads';
@@ -141,9 +148,10 @@ class Dashboard {
 
     // Update tool information display
     updateToolInfo() {
-        const toolFrame = document.getElementById('toolFrame');
         const toolTitle = document.getElementById('toolTitle');
         const toolDescription = document.getElementById('toolDescription');
+        
+        if (!toolTitle || !toolDescription) return;
         
         if (this.currentTool) {
             toolTitle.textContent = this.currentTool.title;
@@ -160,18 +168,31 @@ class Dashboard {
         const loginTime = localStorage.getItem('loginTime');
         if (loginTime && this.currentUser) {
             const logoutTime = new Date().toISOString();
-            // In a real app, you'd send this to a server
-            console.log('User session:', {
-                user: this.currentUser.name,
-                login: loginTime,
-                logout: logoutTime
-            });
+            
+            // Update user logout time in localStorage
+            this.updateUserLogoutTime(this.currentUser.phone, logoutTime);
         }
         
         // Clear storage and redirect
         localStorage.removeItem('currentUser');
         localStorage.removeItem('loginTime');
         window.location.href = 'index.html';
+    }
+
+    // Update user logout time in localStorage
+    updateUserLogoutTime(phone, logoutTime) {
+        const storedUsers = localStorage.getItem('easycal_users');
+        if (storedUsers) {
+            const users = JSON.parse(storedUsers);
+            const userIndex = users.findIndex(u => u.phone === phone);
+            if (userIndex !== -1 && users[userIndex].loginHistory) {
+                const lastSession = users[userIndex].loginHistory[users[userIndex].loginHistory.length - 1];
+                if (lastSession && !lastSession.logout) {
+                    lastSession.logout = logoutTime;
+                    localStorage.setItem('easycal_users', JSON.stringify(users));
+                }
+            }
+        }
     }
 }
 
