@@ -306,5 +306,19 @@
 
     <!-- JavaScript -->
     <script src="js/admin.js"></script>
+    <!-- Add this right before closing body tag in admin.html -->
+<script>
+// Quick initialization fix
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Admin page loaded');
+    
+    // Force reload users data after a short delay
+    setTimeout(() => {
+        if (window.adminPanel) {
+            window.adminPanel.loadUsersData();
+        }
+    }, 100);
+});
+</script>
 </body>
 </html>
