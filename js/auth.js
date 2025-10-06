@@ -80,8 +80,8 @@ function loginUser(phone, password) {
         },
         {
             id: '2',
-            phone: '0111111111',
-            password: 'admin123',
+            phone: '01955255066',
+            password: '12345',
             name: 'System Admin',
             role: 'admin',
             expiryDate: '2099-12-31',
@@ -254,8 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
             passwordInput.value = '1234';
         }
         if (urlParams.get('demo') === 'admin') {
-            phoneInput.value = '0111111111';
-            passwordInput.value = 'admin123';
+            phoneInput.value = '01955255066';
+            passwordInput.value = '12345';
         }
     }
 
