@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCal - Payment Required</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-card">
+            <!-- Header -->
+            <div class="payment-header">
+                <img src="assets/images/logo.png" alt="EasyCal Logo" class="logo">
+                <h1>Subscription Expired</h1>
+                <p class="subtitle">Your EasyCal access has expired. Please renew your subscription to continue using our tools.</p>
+            </div>
+
+            <!-- User Info -->
+            <div class="user-info-card">
+                <div class="user-details">
+                    <h3>User Information</h3>
+                    <div class="detail-item">
+                        <span class="label">Name:</span>
+                        <span class="value" id="userName">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Phone:</span>
+                        <span class="value" id="userPhone">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Expired On:</span>
+                        <span class="value" id="expiryDate">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Your Payment Link:</span>
+                        <span class="value link" id="paymentLink">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <h2>Payment Methods</h2>
+                
+                <!-- QR Code Payment -->
+                <div class="payment-method">
+                    <h3>📱 Scan QR Code</h3>
+                    <div class="qr-container">
+                        <img src="assets/images/qr-code.png" alt="Payment QR Code" class="qr-code" id="qrCode">
+                        <p class="qr-instruction">Scan this QR code with your mobile banking app</p>
+                    </div>
+                </div>
+
+                <!-- Online Payment -->
+                <div class="payment-method">
+                    <h3>🌐 Online Payment</h3>
+                    <div class="online-payment">
+                        <a href="#" class="payment-link-btn" id="paymentLinkBtn">
+                            💳 Pay Online Now
+                        </a>
+                        <p class="payment-instruction">Click above to complete payment via our secure portal</p>
+                    </div>
+                </div>
+
+                <!-- Bank Transfer -->
+                <div class="payment-method">
+                    <h3>🏦 Bank Transfer</h3>
+                    <div class="bank-details">
+                        <div class="bank-info">
+                            <strong>Bank:</strong> Example Bank<br>
+                            <strong>Account:</strong> 1234 5678 9012<br>
+                            <strong>Name:</strong> EasyCal Solutions<br>
+                            <strong>Reference:</strong> <span id="userReference">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Instructions -->
+            <div class="instructions">
+                <h3>How to Complete Payment:</h3>
+                <ol class="steps-list">
+                    <li>Choose your preferred payment method above</li>
+                    <li>Complete the payment process</li>
+                    <li>Take a screenshot of payment confirmation</li>
+                    <li>Contact support with your payment proof</li>
+                    <li>Your account will be activated within 1-2 hours</li>
+                </ol>
+            </div>
+
+            <!-- Support Section -->
+            <div class="support-section">
+                <h3>Need Help?</h3>
+                <p>Contact our support team for assistance with payment or account activation.</p>
+                <a href="https://wa.me/8801955255066?text=Hello%20EasyCal%20Support,%20I%20need%20help%20with%20payment" 
+                   class="whatsapp-btn" target="_blank">
+                    💬 Contact WhatsApp Support
+                </a>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                    ← Back to Login
+                </button>
+                <button class="btn btn-primary" onclick="location.reload()">
+                    🔄 Refresh Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="payment-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EasyCal. All rights reserved. | Payment Portal</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a> | 
+                <a href="support.html">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/payment.js"></script>
+</body>
+              </html>
