@@ -69,7 +69,7 @@ class PaymentPage {
         if (whatsappBtn && this.expiredUser) {
             const message = `Hello EasyCal Support, I need help with payment renewal for user: ${this.expiredUser.name} (${this.expiredUser.phone})`;
             const encodedMessage = encodeURIComponent(message);
-            whatsappBtn.href = `https://wa.me/1234567890?text=${encodedMessage}`;
+            whatsappBtn.href = `https://wa.me/+881955255066?text=${encodedMessage}`;
         }
 
         // Refresh status button
