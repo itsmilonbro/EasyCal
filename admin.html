@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCal - Admin Panel</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="EasyCal Logo" class="logo">
+                <span class="app-name">EasyCal Admin</span>
+            </div>
+            
+            <div class="admin-info">
+                <span class="welcome-text">Welcome, <span id="adminName">Admin</span></span>
+                <span class="admin-badge">Administrator</span>
+                <button id="logoutBtn" class="logout-btn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="admin-container">
+        <!-- Sidebar Menu -->
+        <aside class="admin-sidebar">
+            <nav class="admin-menu">
+                <div class="menu-section">
+                    <h3 class="menu-title">Navigation</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="dashboard.html" class="menu-link">
+                                🏠 User Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-section">
+                    <h3 class="menu-title">Admin Tools</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <a href="#users" class="menu-link active" data-tab="users">
+                                👥 User Management
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#analytics" class="menu-link" data-tab="analytics">
+                                📊 Analytics
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#settings" class="menu-link" data-tab="settings">
+                                ⚙️ Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Same Tools Menu as User Dashboard -->
+                <div class="menu-section">
+                    <h3 class="menu-title">Calculation Tools</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                🏗️ Construction Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/construction/concrete-bricks.html" target="toolFrame">Concrete Bricks Estimation</a></li>
+                                <li><a href="tools/construction/flooring.html" target="toolFrame">Flooring Calculator</a></li>
+                                <li><a href="tools/construction/paint-estimate.html" target="toolFrame">Paint Estimate</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                🌲 Timber Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/timber/sawn-timber.html" target="toolFrame">Sawn Timber Calculator</a></li>
+                                <li><a href="tools/timber/non-sawn.html" target="toolFrame">Non-Sawn Timber Calculator</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Other categories same as dashboard -->
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                ⚙️ Engineering Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/engineering/blank-tools.html" target="toolFrame">Unit Converter</a></li>
+                                <li><a href="tools/engineering/blank-tools.html" target="toolFrame">Geometry Calculator</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-content">
+            <!-- Users Management Tab -->
+            <div id="usersTab" class="tab-content active">
+                <div class="tab-header">
+                    <h1>User Management</h1>
+                    <p>Create, edit, and manage system users</p>
+                    <button id="addUserBtn" class="btn btn-primary">
+                        ➕ Add New User
+                    </button>
+                </div>
+
+                <!-- Users Table -->
+                <div class="card">
+                    <div class="table-container">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Expiry Date</th>
+                                    <th>Last Login</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will be loaded here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analyticsTab" class="tab-content">
+                <div class="tab-header">
+                    <h1>System Analytics</h1>
+                    <p>User activity and system statistics</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🟢</div>
+                        <div class="stat-info">
+                            <h3 id="activeUsers">0</h3>
+                            <p>Active Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔴</div>
+                        <div class="stat-info">
+                            <h3 id="expiredUsers">0</h3>
+                            <p>Expired Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <h3 id="todayLogins">0</h3>
+                            <p>Today's Logins</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <h3>Recent User Activity</h3>
+                    <div class="activity-list" id="activityList">
+                        <!-- Activity will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <div class="tab-header">
+                    <h1>System Settings</h1>
+                    <p>Configure application settings</p>
+                </div>
+
+                <div class="card">
+                    <h3>Payment Settings</h3>
+                    <div class="form-group">
+                        <label for="paymentLink">Default Payment Link</label>
+                        <input type="url" id="paymentLink" class="form-control" 
+                               placeholder="https://your-payment-link.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsappNumber">WhatsApp Support Number</label>
+                        <input type="tel" id="whatsappNumber" class="form-control" 
+                               placeholder="+1234567890">
+                    </div>
+                    <button class="btn btn-primary">Save Settings</button>
+                </div>
+
+                <div class="card">
+                    <h3>System Information</h3>
+                    <div class="system-info">
+                        <div class="info-item">
+                            <span class="info-label">Version:</span>
+                            <span class="info-value">EasyCal 1.0.0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Backup:</span>
+                            <span class="info-value" id="lastBackup">Never</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total Tools:</span>
+                            <span class="info-value" id="totalTools">15</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tool Content Area (Same as user dashboard) -->
+            <div class="tool-container">
+                <iframe 
+                    id="toolFrame" 
+                    name="toolFrame" 
+                    src="welcome.html" 
+                    frameborder="0" 
+                    class="tool-iframe"
+                    title="Calculation Tool"
+                ></iframe>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New User</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="userForm" class="modal-body">
+                <input type="hidden" id="editUserId">
+                
+                <div class="form-group">
+                    <label for="userName">Full Name *</label>
+                    <input type="text" id="userName" class="form-control" required 
+                           placeholder="Enter user's full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="userPhone">Phone Number *</label>
+                    <input type="tel" id="userPhone" class="form-control" required 
+                           placeholder="Enter 10-11 digit phone number"
+                           pattern="[0-9]{10,11}">
+                </div>
+
+                <div class="form-group">
+                    <label for="userPassword">Password *</label>
+                    <input type="password" id="userPassword" class="form-control" required 
+                           placeholder="Enter password (min 4 characters)"
+                           minlength="4">
+                </div>
+
+                <div class="form-group">
+                    <label for="userExpiry">Expiry Date *</label>
+                    <input type="date" id="userExpiry" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="userCustomLink">Custom Payment Link</label>
+                    <input type="url" id="userCustomLink" class="form-control" 
+                           placeholder="https://custom-payment-link.com/user123">
+                    <small>Leave empty to use default payment link</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveUserBtn">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="admin-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EasyCal. All rights reserved. | Admin Panel v1.0</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a> | 
+                <a href="support.html">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/admin.js"></script>
+</body>
+</html>
