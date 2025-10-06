@@ -1,4 +1,4 @@
-// Admin Panel Functionality for EasyCal - UPDATED & FIXED
+// Admin Panel Functionality for EasyCal - COMPLETELY FIXED
 
 class AdminPanel {
     constructor() {
@@ -36,67 +36,65 @@ class AdminPanel {
     // Load admin data
     loadAdminData() {
         if (this.currentAdmin) {
-            document.getElementById('adminName').textContent = this.currentAdmin.name;
+            const adminNameElement = document.getElementById('adminName');
+            if (adminNameElement) {
+                adminNameElement.textContent = this.currentAdmin.name;
+            }
         }
     }
 
-    // Load users data from localStorage
+    // Load users data from localStorage - FIXED
     loadUsersData() {
-        const storedUsers = localStorage.getItem('easycal_users');
-        
-        if (storedUsers) {
-            this.users = JSON.parse(storedUsers);
-        } else {
-            // Sample users for demo
-            this.users = [
-                {
-                    id: '1',
-                    phone: '0123456789',
-                    password: '1234',
-                    name: 'Demo User',
-                    role: 'user',
-                    expiryDate: '2024-12-31',
-                    customLink: 'https://payment.com/user123',
-                    loginHistory: [
-                        { login: '2024-01-15T10:30:00Z', logout: '2024-01-15T12:45:00Z' },
-                        { login: '2024-01-14T09:15:00Z', logout: '2024-01-14T11:20:00Z' }
-                    ]
-                },
-                {
-                    id: '2',
-                    phone: '0987654321',
-                    password: '1234',
-                    name: 'Test User',
-                    role: 'user',
-                    expiryDate: '2024-01-20',
-                    customLink: '',
-                    loginHistory: [
-                        { login: '2024-01-15T14:20:00Z', logout: '2024-01-15T16:30:00Z' }
-                    ]
-                }
-            ];
+        try {
+            const storedUsers = localStorage.getItem('easycal_users');
+            
+            if (storedUsers && storedUsers !== 'undefined') {
+                this.users = JSON.parse(storedUsers);
+            } else {
+                // Initialize with empty array if no users exist
+                this.users = [];
+                this.saveUsers();
+            }
+            
+            console.log('Loaded users:', this.users); // Debug log
+            this.renderUsersTable();
+        } catch (error) {
+            console.error('Error loading users:', error);
+            this.users = [];
             this.saveUsers();
         }
-        
-        this.renderUsersTable();
     }
 
-    // Save users to localStorage
+    // Save users to localStorage - FIXED
     saveUsers() {
-        localStorage.setItem('easycal_users', JSON.stringify(this.users));
+        try {
+            localStorage.setItem('easycal_users', JSON.stringify(this.users));
+            console.log('Users saved:', this.users); // Debug log
+        } catch (error) {
+            console.error('Error saving users:', error);
+        }
     }
 
-    // Setup event listeners
+    // Setup event listeners - FIXED
     setupEventListeners() {
         // Logout button
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            this.logout();
-        });
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                this.logout();
+            });
+        }
 
         // Add user button
-        document.getElementById('addUserBtn').addEventListener('click', () => {
-            this.openAddUserModal();
-        });
+        const addUserBtn = document.getElementById('addUserBtn');
+        if (addUserBtn) {
+            addUserBtn.addEventListener('click', () => {
+                this.openAddUserModal();
+            });
+        }
+
+        // Make functions globally available
+        window.adminPanel = this;
     }
 
     // Setup tab system
@@ -136,16 +134,17 @@ class AdminPanel {
         }
     }
 
-    // Setup modal functionality
+    // Setup modal functionality - FIXED
     setupModal() {
         const modal = document.getElementById('userModal');
         const closeBtn = document.querySelector('.close');
         const cancelBtn = document.getElementById('cancelBtn');
         const userForm = document.getElementById('userForm');
 
-        // Open modal
-        window.openAddUserModal = () => this.openAddUserModal();
-        window.openEditUserModal = (userId) => this.openEditUserModal(userId);
+        if (!modal || !closeBtn || !cancelBtn || !userForm) {
+            console.error('Modal elements not found');
+            return;
+        }
 
         // Close modal
         const closeModal = () => {
@@ -169,32 +168,57 @@ class AdminPanel {
             e.preventDefault();
             this.saveUser();
         });
+
+        console.log('Modal setup completed');
     }
 
-    // Open add user modal
+    // Open add user modal - FIXED
     openAddUserModal() {
         const modal = document.getElementById('userModal');
         const modalTitle = document.getElementById('modalTitle');
         
+        if (!modal || !modalTitle) {
+            console.error('Modal elements not found');
+            return;
+        }
+        
         modalTitle.textContent = 'Add New User';
         document.getElementById('editUserId').value = '';
-        document.getElementById('userForm').reset();
+        
+        // Reset form
+        const userForm = document.getElementById('userForm');
+        if (userForm) {
+            userForm.reset();
+        }
         
         // Set default expiry date to 30 days from now
         const defaultExpiry = new Date();
         defaultExpiry.setDate(defaultExpiry.getDate() + 30);
-        document.getElementById('userExpiry').value = defaultExpiry.toISOString().split('T')[0];
+        const expiryInput = document.getElementById('userExpiry');
+        if (expiryInput) {
+            expiryInput.value = defaultExpiry.toISOString().split('T')[0];
+        }
         
         modal.style.display = 'block';
+        console.log('Add user modal opened');
     }
 
-    // Open edit user modal
+    // Open edit user modal - FIXED
     openEditUserModal(userId) {
+        console.log('Opening edit modal for user:', userId);
         const user = this.users.find(u => u.id === userId);
-        if (!user) return;
+        if (!user) {
+            alert('User not found!');
+            return;
+        }
 
         const modal = document.getElementById('userModal');
         const modalTitle = document.getElementById('modalTitle');
+        
+        if (!modal || !modalTitle) {
+            console.error('Modal elements not found');
+            return;
+        }
         
         modalTitle.textContent = 'Edit User';
         document.getElementById('editUserId').value = user.id;
@@ -205,10 +229,13 @@ class AdminPanel {
         document.getElementById('userCustomLink').value = user.customLink || '';
         
         modal.style.display = 'block';
+        console.log('Edit user modal opened for:', user.name);
     }
 
-    // Save user (add or edit) - UPDATED & FIXED
+    // Save user (add or edit) - COMPLETELY FIXED
     saveUser() {
+        console.log('Save user function called');
+        
         const userId = document.getElementById('editUserId').value;
         const userData = {
             name: document.getElementById('userName').value.trim(),
@@ -219,6 +246,14 @@ class AdminPanel {
             role: 'user',
             loginHistory: []
         };
+
+        console.log('User data to save:', userData);
+
+        // Validate required fields
+        if (!userData.name || !userData.phone || !userData.password || !userData.expiryDate) {
+            alert('Please fill in all required fields!');
+            return;
+        }
 
         // Validate phone number
         if (!this.validatePhone(userData.phone)) {
@@ -234,42 +269,51 @@ class AdminPanel {
 
         // Check if phone number already exists (for new users)
         if (!userId) {
-            const existingUser = this.users.find(u => u.phone === userData.phone && u.role === 'user');
+            const existingUser = this.users.find(u => u.phone === userData.phone);
             if (existingUser) {
                 alert('Phone number already registered! Please use a different phone number.');
                 return;
             }
         }
 
-        if (userId) {
-            // Edit existing user
-            const userIndex = this.users.findIndex(u => u.id === userId);
-            if (userIndex !== -1) {
-                // Keep existing login history and ID
-                userData.loginHistory = this.users[userIndex].loginHistory || [];
-                userData.id = userId;
-                this.users[userIndex] = userData;
+        try {
+            if (userId) {
+                // Edit existing user
+                const userIndex = this.users.findIndex(u => u.id === userId);
+                if (userIndex !== -1) {
+                    // Keep existing login history and ID
+                    userData.loginHistory = this.users[userIndex].loginHistory || [];
+                    userData.id = userId;
+                    this.users[userIndex] = userData;
+                    console.log('User updated:', userData);
+                }
+            } else {
+                // Add new user
+                userData.id = 'user_' + Date.now().toString();
+                userData.loginHistory = [];
+                this.users.push(userData);
+                console.log('New user added:', userData);
             }
-        } else {
-            // Add new user
-            userData.id = Date.now().toString();
-            userData.loginHistory = [];
-            this.users.push(userData);
-        }
 
-        this.saveUsers();
-        this.renderUsersTable();
-        this.updateStats();
-        
-        // Close modal
-        document.getElementById('userModal').style.display = 'none';
-        document.getElementById('userForm').reset();
-        
-        alert(userId ? 'User updated successfully!' : 'User created successfully!');
+            this.saveUsers();
+            this.renderUsersTable();
+            this.updateStats();
+            
+            // Close modal
+            document.getElementById('userModal').style.display = 'none';
+            document.getElementById('userForm').reset();
+            
+            alert(userId ? 'User updated successfully!' : 'User created successfully!');
+            
+        } catch (error) {
+            console.error('Error saving user:', error);
+            alert('Error saving user: ' + error.message);
+        }
     }
 
-    // Delete user
+    // Delete user - FIXED
     deleteUser(userId) {
+        console.log('Delete user called:', userId);
         if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
             this.users = this.users.filter(user => user.id !== userId);
             this.saveUsers();
@@ -285,10 +329,28 @@ class AdminPanel {
         return phoneRegex.test(phone);
     }
 
-    // Render users table
+    // Render users table - FIXED
     renderUsersTable() {
         const tbody = document.getElementById('usersTableBody');
+        if (!tbody) {
+            console.error('Users table body not found');
+            return;
+        }
+        
         tbody.innerHTML = '';
+
+        console.log('Rendering users:', this.users);
+
+        if (this.users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                        No users found. Click "Add New User" to create your first user.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
 
         this.users.forEach(user => {
             if (user.role === 'user') { // Don't show admin users
@@ -300,8 +362,8 @@ class AdminPanel {
                     : 'Never';
                 
                 row.innerHTML = `
-                    <td>${user.name}</td>
-                    <td>${user.phone}</td>
+                    <td>${user.name || 'N/A'}</td>
+                    <td>${user.phone || 'N/A'}</td>
                     <td>${this.formatDate(user.expiryDate)}</td>
                     <td>${lastLogin}</td>
                     <td><span class="status-badge status-${status}">${status.toUpperCase()}</span></td>
@@ -323,12 +385,17 @@ class AdminPanel {
                 tbody.appendChild(row);
             }
         });
+        
+        console.log('Users table rendered successfully');
     }
 
     // View user details
     viewUserDetails(userId) {
         const user = this.users.find(u => u.id === userId);
-        if (!user) return;
+        if (!user) {
+            alert('User not found!');
+            return;
+        }
 
         let details = `User Details:\n\n`;
         details += `Name: ${user.name}\n`;
@@ -351,52 +418,61 @@ class AdminPanel {
 
     // Check if user is expired
     isUserExpired(expiryDate) {
+        if (!expiryDate) return true;
         const today = new Date().toISOString().split('T')[0];
         return expiryDate < today;
     }
 
-    // Update statistics
+    // Update statistics - FIXED
     updateStats() {
         const totalUsers = this.users.filter(u => u.role === 'user').length;
         const activeUsers = this.users.filter(u => u.role === 'user' && !this.isUserExpired(u.expiryDate)).length;
         const expiredUsers = totalUsers - activeUsers;
         
-        // Calculate today's logins (simplified)
+        // Calculate today's logins
         const today = new Date().toISOString().split('T')[0];
         const todayLogins = this.users.reduce((count, user) => {
             if (user.loginHistory) {
                 const hasTodayLogin = user.loginHistory.some(session => 
-                    session.login.startsWith(today)
+                    session.login && session.login.startsWith(today)
                 );
                 return count + (hasTodayLogin ? 1 : 0);
             }
             return count;
         }, 0);
 
-        document.getElementById('totalUsers').textContent = totalUsers;
-        document.getElementById('activeUsers').textContent = activeUsers;
-        document.getElementById('expiredUsers').textContent = expiredUsers;
-        document.getElementById('todayLogins').textContent = todayLogins;
+        // Update DOM elements
+        const updateElement = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        };
+
+        updateElement('totalUsers', totalUsers);
+        updateElement('activeUsers', activeUsers);
+        updateElement('expiredUsers', expiredUsers);
+        updateElement('todayLogins', todayLogins);
 
         this.renderRecentActivity();
     }
 
-    // Render recent activity
+    // Render recent activity - FIXED
     renderRecentActivity() {
         const activityList = document.getElementById('activityList');
-        activityList.innerHTML = '';
+        if (!activityList) return;
 
         // Get all login sessions from all users
         const allSessions = [];
         this.users.forEach(user => {
             if (user.loginHistory) {
                 user.loginHistory.forEach(session => {
-                    allSessions.push({
-                        user: user.name,
-                        phone: user.phone,
-                        login: session.login,
-                        logout: session.logout
-                    });
+                    if (session.login) {
+                        allSessions.push({
+                            user: user.name,
+                            phone: user.phone,
+                            login: session.login,
+                            logout: session.logout
+                        });
+                    }
                 });
             }
         });
@@ -412,6 +488,7 @@ class AdminPanel {
             return;
         }
 
+        activityList.innerHTML = '';
         recentSessions.forEach(session => {
             const activityItem = document.createElement('div');
             activityItem.className = 'activity-item';
@@ -432,12 +509,14 @@ class AdminPanel {
 
     // Format date for display
     formatDate(dateString) {
+        if (!dateString) return 'Not set';
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('en-US', options);
     }
 
     // Format date and time for display
     formatDateTime(dateTimeString) {
+        if (!dateTimeString) return 'Unknown';
         const options = { 
             year: 'numeric', 
             month: 'short', 
@@ -452,4 +531,36 @@ class AdminPanel {
     logout() {
         // Store logout time
         const loginTime = localStorage.getItem('loginTime');
-        if (loginTime && this
+        if (loginTime && this.currentAdmin) {
+            const logoutTime = new Date().toISOString();
+            console.log('Admin session:', {
+                admin: this.currentAdmin.name,
+                login: loginTime,
+                logout: logoutTime
+            });
+        }
+        
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('loginTime');
+        window.location.href = 'index.html';
+    }
+}
+
+// Initialize admin panel when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Initializing Admin Panel...');
+    window.adminPanel = new AdminPanel();
+});
+
+// Make functions globally available
+window.openAddUserModal = () => {
+    if (window.adminPanel) {
+        window.adminPanel.openAddUserModal();
+    }
+};
+
+window.openEditUserModal = (userId) => {
+    if (window.adminPanel) {
+        window.adminPanel.openEditUserModal(userId);
+    }
+};
