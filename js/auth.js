@@ -1,32 +1,4 @@
-// Authentication System for EasyCal
-
-// Sample User Data (In real app, this would be in a database)
-const users = [
-    {
-        phone: '0123456789',
-        password: '1234',
-        name: 'Demo User',
-        role: 'user',
-        expiryDate: '2024-12-31',
-        customLink: 'https://payment-link.com/user123'
-    },
-    {
-        phone: '0111111111',
-        password: 'admin123',
-        name: 'System Admin',
-        role: 'admin',
-        expiryDate: '2099-12-31',
-        customLink: ''
-    }
-];
-
-// DOM Elements
-const loginForm = document.getElementById('loginForm');
-const phoneInput = document.getElementById('phone');
-const passwordInput = document.getElementById('password');
-const loginBtn = document.getElementById('loginBtn');
-const phoneError = document.getElementById('phoneError');
-const passwordError = document.getElementById('passwordError');
+// Authentication System for EasyCal - UPDATED & FIXED
 
 // Utility Functions
 function showError(element, message) {
@@ -40,19 +12,25 @@ function hideError(element) {
 }
 
 function showLoading() {
-    const btnText = loginBtn.querySelector('.btn-text');
-    const btnLoading = loginBtn.querySelector('.btn-loading');
-    btnText.style.display = 'none';
-    btnLoading.style.display = 'inline';
-    loginBtn.disabled = true;
+    const btnText = document.querySelector('.btn-text');
+    const btnLoading = document.querySelector('.btn-loading');
+    if (btnText && btnLoading) {
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
+    }
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) loginBtn.disabled = true;
 }
 
 function hideLoading() {
-    const btnText = loginBtn.querySelector('.btn-text');
-    const btnLoading = loginBtn.querySelector('.btn-loading');
-    btnText.style.display = 'inline';
-    btnLoading.style.display = 'none';
-    loginBtn.disabled = false;
+    const btnText = document.querySelector('.btn-text');
+    const btnLoading = document.querySelector('.btn-loading');
+    if (btnText && btnLoading) {
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
+    }
+    const loginBtn = document.getElementById('loginBtn');
+    if (loginBtn) loginBtn.disabled = false;
 }
 
 function validatePhone(phone) {
@@ -70,10 +48,50 @@ function isUserExpired(expiryDate) {
     return expiryDate < today;
 }
 
-// Login Function
+// Login Function - UPDATED TO CHECK ALL USERS
 function loginUser(phone, password) {
+    // Get users from localStorage (from admin panel)
+    const storedUsers = localStorage.getItem('easycal_users');
+    let allUsers = [];
+    
+    if (storedUsers) {
+        allUsers = JSON.parse(storedUsers);
+    }
+    
+    // Also include the default demo users
+    const defaultUsers = [
+        {
+            id: '1',
+            phone: '0123456789',
+            password: '1234',
+            name: 'Demo User',
+            role: 'user',
+            expiryDate: '2024-12-31',
+            customLink: 'https://payment-link.com/user123',
+            loginHistory: []
+        },
+        {
+            id: '2',
+            phone: '0111111111',
+            password: 'admin123',
+            name: 'System Admin',
+            role: 'admin',
+            expiryDate: '2099-12-31',
+            customLink: '',
+            loginHistory: []
+        }
+    ];
+    
+    // Combine all users and remove duplicates
+    const combinedUsers = [...defaultUsers];
+    allUsers.forEach(storedUser => {
+        if (!combinedUsers.find(u => u.phone === storedUser.phone)) {
+            combinedUsers.push(storedUser);
+        }
+    });
+    
     // Find user by phone number
-    const user = users.find(u => u.phone === phone);
+    const user = combinedUsers.find(u => u.phone === phone);
     
     if (!user) {
         throw new Error('Phone number not registered');
@@ -94,97 +112,138 @@ function loginUser(phone, password) {
     return user;
 }
 
-// Event Listeners
-phoneInput.addEventListener('input', () => {
-    if (validatePhone(phoneInput.value)) {
-        hideError(phoneError);
-    }
-});
+// Event Listeners and Form Submission
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const phoneInput = document.getElementById('phone');
+    const passwordInput = document.getElementById('password');
+    const phoneError = document.getElementById('phoneError');
+    const passwordError = document.getElementById('passwordError');
 
-passwordInput.addEventListener('input', () => {
-    if (validatePassword(passwordInput.value)) {
-        hideError(passwordError);
-    }
-});
-
-// Form Submission
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const phone = phoneInput.value.trim();
-    const password = passwordInput.value.trim();
-    
-    // Reset errors
-    hideError(phoneError);
-    hideError(passwordError);
-    
-    // Validate inputs
-    let isValid = true;
-    
-    if (!validatePhone(phone)) {
-        showError(phoneError, 'Please enter a valid 10-11 digit phone number');
-        isValid = false;
-    }
-    
-    if (!validatePassword(password)) {
-        showError(passwordError, 'Password must be at least 4 characters long');
-        isValid = false;
-    }
-    
-    if (!isValid) return;
-    
-    showLoading();
-    
-    try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        const user = loginUser(phone, password);
-        
-        if (user) {
-            // Store user in localStorage
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            localStorage.setItem('loginTime', new Date().toISOString());
-            
-            // Redirect based on role
+    // Check if user is already logged in
+    function checkExistingLogin() {
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            const user = JSON.parse(currentUser);
             if (user.role === 'admin') {
                 window.location.href = 'admin.html';
             } else {
                 window.location.href = 'dashboard.html';
             }
         }
-    } catch (error) {
-        hideLoading();
-        showError(passwordError, error.message);
-        passwordInput.focus();
     }
-});
 
-// Check if user is already logged in
-function checkExistingLogin() {
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-        const user = JSON.parse(currentUser);
-        if (user.role === 'admin') {
-            window.location.href = 'admin.html';
-        } else {
-            window.location.href = 'dashboard.html';
+    // Phone input validation
+    if (phoneInput) {
+        phoneInput.addEventListener('input', () => {
+            if (validatePhone(phoneInput.value)) {
+                hideError(phoneError);
+            }
+        });
+    }
+
+    // Password input validation
+    if (passwordInput) {
+        passwordInput.addEventListener('input', () => {
+            if (validatePassword(passwordInput.value)) {
+                hideError(passwordError);
+            }
+        });
+    }
+
+    // Form submission
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const phone = phoneInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // Reset errors
+            hideError(phoneError);
+            hideError(passwordError);
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (!validatePhone(phone)) {
+                showError(phoneError, 'Please enter a valid 10-11 digit phone number');
+                isValid = false;
+            }
+            
+            if (!validatePassword(password)) {
+                showError(passwordError, 'Password must be at least 4 characters long');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            showLoading();
+            
+            try {
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const user = loginUser(phone, password);
+                
+                if (user) {
+                    // Store user in localStorage
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('loginTime', new Date().toISOString());
+                    
+                    // Update login history
+                    updateUserLoginHistory(user.phone);
+                    
+                    // Redirect based on role
+                    if (user.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                }
+            } catch (error) {
+                hideLoading();
+                showError(passwordError, error.message);
+                passwordInput.focus();
+            }
+        });
+    }
+
+    // Update user login history
+    function updateUserLoginHistory(phone) {
+        const storedUsers = localStorage.getItem('easycal_users');
+        let users = [];
+        
+        if (storedUsers) {
+            users = JSON.parse(storedUsers);
+        }
+        
+        const userIndex = users.findIndex(u => u.phone === phone);
+        if (userIndex !== -1) {
+            if (!users[userIndex].loginHistory) {
+                users[userIndex].loginHistory = [];
+            }
+            users[userIndex].loginHistory.push({
+                login: new Date().toISOString(),
+                logout: null
+            });
+            localStorage.setItem('easycal_users', JSON.stringify(users));
         }
     }
-}
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    checkExistingLogin();
-    
     // Add demo credentials fill for testing
-    if (window.location.search.includes('demo=user')) {
-        phoneInput.value = '0123456789';
-        passwordInput.value = '1234';
+    if (phoneInput && passwordInput) {
+        // Auto-fill demo credentials for testing
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('demo') === 'user') {
+            phoneInput.value = '0123456789';
+            passwordInput.value = '1234';
+        }
+        if (urlParams.get('demo') === 'admin') {
+            phoneInput.value = '0111111111';
+            passwordInput.value = 'admin123';
+        }
     }
-    
-    if (window.location.search.includes('demo=admin')) {
-        phoneInput.value = '0111111111';
-        passwordInput.value = 'admin123';
-    }
+
+    checkExistingLogin();
 });
