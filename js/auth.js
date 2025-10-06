@@ -48,14 +48,22 @@ function isUserExpired(expiryDate) {
     return expiryDate < today;
 }
 
-// Login Function - UPDATED TO CHECK ALL USERS
+// Login Function - UPDATED TO PROPERLY CHECK ALL USERS
 function loginUser(phone, password) {
+    console.log('Login attempt for phone:', phone);
+    
     // Get users from localStorage (from admin panel)
     const storedUsers = localStorage.getItem('easycal_users');
     let allUsers = [];
     
-    if (storedUsers) {
-        allUsers = JSON.parse(storedUsers);
+    if (storedUsers && storedUsers !== 'undefined') {
+        try {
+            allUsers = JSON.parse(storedUsers);
+            console.log('Loaded users from storage:', allUsers);
+        } catch (error) {
+            console.error('Error parsing stored users:', error);
+            allUsers = [];
+        }
     }
     
     // Also include the default demo users
@@ -82,33 +90,39 @@ function loginUser(phone, password) {
         }
     ];
     
-    // Combine all users and remove duplicates
-    const combinedUsers = [...defaultUsers];
-    allUsers.forEach(storedUser => {
-        if (!combinedUsers.find(u => u.phone === storedUser.phone)) {
-            combinedUsers.push(storedUser);
+    // Combine all users - prioritize stored users over defaults
+    const combinedUsers = [...allUsers];
+    defaultUsers.forEach(defaultUser => {
+        if (!combinedUsers.find(u => u.phone === defaultUser.phone)) {
+            combinedUsers.push(defaultUser);
         }
     });
+    
+    console.log('All available users:', combinedUsers);
     
     // Find user by phone number
     const user = combinedUsers.find(u => u.phone === phone);
     
     if (!user) {
+        console.log('User not found for phone:', phone);
         throw new Error('Phone number not registered');
     }
     
     if (user.password !== password) {
+        console.log('Invalid password for user:', user.name);
         throw new Error('Invalid password');
     }
     
     // Check if user is expired
     if (user.role === 'user' && isUserExpired(user.expiryDate)) {
+        console.log('User expired:', user.name);
         // Store user data for payment page
         localStorage.setItem('expiredUser', JSON.stringify(user));
         window.location.href = 'payment.html';
         return null;
     }
     
+    console.log('Login successful for user:', user.name);
     return user;
 }
 
