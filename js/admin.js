@@ -1,4 +1,4 @@
-// Admin Panel Functionality for EasyCal
+// Admin Panel Functionality for EasyCal - UPDATED & FIXED
 
 class AdminPanel {
     constructor() {
@@ -42,8 +42,6 @@ class AdminPanel {
 
     // Load users data from localStorage
     loadUsersData() {
-        // In a real app, this would come from a server
-        // For demo, we'll use sample data and localStorage
         const storedUsers = localStorage.getItem('easycal_users');
         
         if (storedUsers) {
@@ -209,7 +207,7 @@ class AdminPanel {
         modal.style.display = 'block';
     }
 
-    // Save user (add or edit)
+    // Save user (add or edit) - UPDATED & FIXED
     saveUser() {
         const userId = document.getElementById('editUserId').value;
         const userData = {
@@ -234,18 +232,28 @@ class AdminPanel {
             return;
         }
 
+        // Check if phone number already exists (for new users)
+        if (!userId) {
+            const existingUser = this.users.find(u => u.phone === userData.phone && u.role === 'user');
+            if (existingUser) {
+                alert('Phone number already registered! Please use a different phone number.');
+                return;
+            }
+        }
+
         if (userId) {
             // Edit existing user
             const userIndex = this.users.findIndex(u => u.id === userId);
             if (userIndex !== -1) {
-                // Keep existing login history
-                userData.loginHistory = this.users[userIndex].loginHistory;
+                // Keep existing login history and ID
+                userData.loginHistory = this.users[userIndex].loginHistory || [];
                 userData.id = userId;
                 this.users[userIndex] = userData;
             }
         } else {
             // Add new user
             userData.id = Date.now().toString();
+            userData.loginHistory = [];
             this.users.push(userData);
         }
 
@@ -254,7 +262,8 @@ class AdminPanel {
         this.updateStats();
         
         // Close modal
-        document.querySelector('.close').click();
+        document.getElementById('userModal').style.display = 'none';
+        document.getElementById('userForm').reset();
         
         alert(userId ? 'User updated successfully!' : 'User created successfully!');
     }
@@ -298,7 +307,7 @@ class AdminPanel {
                     <td><span class="status-badge status-${status}">${status.toUpperCase()}</span></td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-edit btn-sm" onclick="window.openEditUserModal('${user.id}')">
+                            <button class="btn btn-edit btn-sm" onclick="adminPanel.openEditUserModal('${user.id}')">
                                 Edit
                             </button>
                             <button class="btn btn-delete btn-sm" onclick="adminPanel.deleteUser('${user.id}')">
@@ -441,14 +450,6 @@ class AdminPanel {
 
     // Logout admin
     logout() {
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('loginTime');
-        window.location.href = 'index.html';
-    }
-}
-
-// Initialize admin panel when DOM is loaded
-let adminPanel;
-document.addEventListener('DOMContentLoaded', () => {
-    adminPanel = new AdminPanel();
-});
+        // Store logout time
+        const loginTime = localStorage.getItem('loginTime');
+        if (loginTime && this
