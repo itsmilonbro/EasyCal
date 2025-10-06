@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCal - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="assets/images/logo.png" alt="EasyCal Logo" class="logo">
+                <span class="app-name">EasyCal</span>
+            </div>
+            
+            <div class="user-info">
+                <span class="welcome-text">Welcome, <span id="userName">User</span></span>
+                <span class="expiry-date">Expires: <span id="expiryDate">2024-12-31</span></span>
+                <button id="logoutBtn" class="logout-btn">
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="dashboard-container">
+        <!-- Sidebar Menu -->
+        <aside class="sidebar">
+            <nav class="main-menu">
+                <div class="menu-section">
+                    <h3 class="menu-title">Calculation Tools</h3>
+                    <ul class="menu-list">
+                        <!-- Construction Tools -->
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                🏗️ Construction Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/construction/concrete-bricks.html" target="toolFrame">Concrete Bricks Estimation</a></li>
+                                <li><a href="tools/construction/flooring.html" target="toolFrame">Flooring Calculator</a></li>
+                                <li><a href="tools/construction/paint-estimate.html" target="toolFrame">Paint Estimate</a></li>
+                                <li><a href="tools/construction/steel-reinforcement.html" target="toolFrame">Steel Reinforcement Calc</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Timber Tools -->
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                🌲 Timber Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/timber/sawn-timber.html" target="toolFrame">Sawn Timber Calculator</a></li>
+                                <li><a href="tools/timber/non-sawn.html" target="toolFrame">Non-Sawn Timber Calculator</a></li>
+                                <li><a href="tools/timber/wood-volume.html" target="toolFrame">Wood Volume Estimator</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Engineering Tools -->
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                ⚙️ Engineering Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/engineering/blank-tools.html" target="toolFrame">Unit Converter</a></li>
+                                <li><a href="tools/engineering/blank-tools.html" target="toolFrame">Geometry Calculator</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Blank Categories for Future -->
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                📊 Sawmills Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/sawmills/blank-tools.html" target="toolFrame">Sawmill Calculator 1</a></li>
+                                <li><a href="tools/sawmills/blank-tools.html" target="toolFrame">Sawmill Calculator 2</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="menu-item has-submenu">
+                            <span class="menu-link">
+                                🪟 Thai Glass Tools
+                                <span class="arrow">▼</span>
+                            </span>
+                            <ul class="submenu">
+                                <li><a href="tools/thai-glass/blank-tools.html" target="toolFrame">Glass Measurement 1</a></li>
+                                <li><a href="tools/thai-glass/blank-tools.html" target="toolFrame">Glass Measurement 2</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 id="toolTitle">EasyCal Dashboard</h1>
+                <p id="toolDescription">Select a tool from the menu to start calculating</p>
+            </div>
+
+            <!-- Tool Content Area -->
+            <div class="tool-container">
+                <iframe 
+                    id="toolFrame" 
+                    name="toolFrame" 
+                    src="welcome.html" 
+                    frameborder="0" 
+                    class="tool-iframe"
+                    title="Calculation Tool"
+                ></iframe>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 EasyCal. All rights reserved. | Multi-Tool Calculation Platform</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a> | 
+                <a href="support.html">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/dashboard.js"></script>
+</body>
+                                  </html>
