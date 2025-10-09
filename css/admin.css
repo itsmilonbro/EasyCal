@@ -356,6 +356,69 @@
     text-align: center;
 }
 
+/* Backup System Styles */
+.backup-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+}
+
+.backup-info .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.backup-info .info-item:last-child {
+    border-bottom: none;
+}
+
+.backup-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.backup-actions .btn {
+    padding: 12px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.backup-tips {
+    background: #e3f2fd;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #2196f3;
+}
+
+.backup-tips h4 {
+    margin: 0 0 10px 0;
+    color: #1976d2;
+}
+
+.backup-tips ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #555;
+}
+
+.backup-tips li {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+/* Responsive backup actions */
+@media (max-width: 768px) {
+    .backup-actions {
+        grid-template-columns: 1fr;
+    }
+        }
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .admin-container {
