@@ -14,9 +14,9 @@ class AdminPanel {
     this.setupEventListeners();
     this.setupTabSystem();
     this.setupModal();
-    this.setupBackup(); // ADD THIS LINE
+    this.setupBackup(); 
     this.updateStats();
-    this.updateBackupTimeDisplay(); // ADD THIS LINE
+    this.updateBackupTimeDisplay(); 
     }
 
     // Check if user is admin
@@ -67,14 +67,37 @@ class AdminPanel {
         }
     }
 
-    // Save users to localStorage - FIXED
-    saveUsers() {
-        try {
-            localStorage.setItem('easycal_users', JSON.stringify(this.users));
-            console.log('Users saved:', this.users); // Debug log
-        } catch (error) {
-            console.error('Error saving users:', error);
+// Save users to localStorage - ENHANCED WITH AUTO-BACKUP
+saveUsers() {
+    try {
+        // Validate users data before saving
+        if (!Array.isArray(this.users)) {
+            console.error('Invalid users data, resetting to empty array');
+            this.users = [];
         }
+        
+        // Save users to main storage
+        localStorage.setItem('easycal_users', JSON.stringify(this.users));
+        console.log('Users saved successfully:', this.users.length, 'users');
+        
+        // Auto-create backup after saving (with slight delay)
+        setTimeout(() => {
+            if (this.createBackup()) {
+                console.log('Auto-backup created after save');
+            }
+        }, 500);
+        
+        return true;
+        
+    } catch (error) {
+        console.error('Error saving users:', error);
+        
+        if (error.name === 'QuotaExceededError') {
+            alert('❌ Browser storage is full! Please export and delete some users.');
+        }
+        
+        return false;
+    }
     }
 
     // Setup event listeners - FIXED
