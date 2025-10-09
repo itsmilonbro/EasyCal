@@ -187,63 +187,61 @@
                 </div>
             </div>
 
-    
-    <!-- settings tab -->
-<div id="settingsTab" class="tab-content">
-    <div class="tab-header">
-        <h1>System Settings</h1>
-        <p>Configure application settings and manage data</p>
-    </div>
+            <!-- Settings Tab --> <!-- FIXED: Added proper closing -->
+            <div id="settingsTab" class="tab-content">
+                <div class="tab-header">
+                    <h1>System Settings</h1>
+                    <p>Configure application settings and manage data</p>
+                </div>
 
-    <!-- Data Management Card -->
-    <div class="card">
-        <h3>📊 Data Management & Backup</h3>
-        
-        <div class="backup-info">
-            <div class="info-item">
-                <span class="info-label">Current Users:</span>
-                <span class="info-value" id="userCount">0</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Last Backup:</span>
-                <span class="info-value" id="lastBackupTime">Never</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Backup Status:</span>
-                <span class="info-value" id="backupStatus">🟢 Active</span>
-            </div>
-        </div>
+                <!-- Data Management Card -->
+                <div class="card">
+                    <h3>📊 Data Management & Backup</h3>
+                    
+                    <div class="backup-info">
+                        <div class="info-item">
+                            <span class="info-label">Current Users:</span>
+                            <span class="info-value" id="userCount">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Backup:</span>
+                            <span class="info-value" id="lastBackupTime">Never</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Backup Status:</span>
+                            <span class="info-value" id="backupStatus">🟢 Active</span>
+                        </div>
+                    </div>
 
-        <div class="backup-actions">
-            <button class="btn btn-success" onclick="adminPanel.createBackup()">
-                💾 Create Backup Now
-            </button>
-            <button class="btn btn-warning" onclick="adminPanel.restoreBackup()">
-                🔄 Restore from Backup
-            </button>
-            <button class="btn btn-info" onclick="adminPanel.exportUsers()">
-                📤 Export Users Data
-            </button>
-            <label class="btn btn-secondary">
-                📥 Import Users Data
-                <input type="file" id="importFile" accept=".json" style="display: none;" 
-                       onchange="adminPanel.importUsers(event)">
-            </label>
-        </div>
-        
-        <div class="backup-tips">
-            <h4>💡 Backup Tips:</h4>
-            <ul>
-                <li>Auto-backup runs every 30 seconds</li>
-                <li>Backup is created when you switch tabs</li>
-                <li>Export data for additional safety</li>
-                <li>Restore if users disappear unexpectedly</li>
-            </ul>
-        </div>
-    </div>
+                    <div class="backup-actions">
+                        <button class="btn btn-success" onclick="adminPanel.createBackup()">
+                            💾 Create Backup Now
+                        </button>
+                        <button class="btn btn-warning" onclick="adminPanel.restoreBackup()">
+                            🔄 Restore from Backup
+                        </button>
+                        <button class="btn btn-info" onclick="adminPanel.exportUsers()">
+                            📤 Export Users Data
+                        </button>
+                        <label class="btn btn-secondary">
+                            📥 Import Users Data
+                            <input type="file" id="importFile" accept=".json" style="display: none;" 
+                                   onchange="adminPanel.importUsers(event)">
+                        </label>
+                    </div>
+                    
+                    <div class="backup-tips">
+                        <h4>💡 Backup Tips:</h4>
+                        <ul>
+                            <li>Auto-backup runs every 30 seconds</li>
+                            <li>Backup is created when you switch tabs</li>
+                            <li>Export data for additional safety</li>
+                            <li>Restore if users disappear unexpectedly</li>
+                        </ul>
+                    </div>
+                </div>
 
-    <!-- Existing settings cards... -->
-
+                <!-- Payment Settings Card -->
                 <div class="card">
                     <h3>Payment Settings</h3>
                     <div class="form-group">
@@ -259,6 +257,7 @@
                     <button class="btn btn-primary">Save Settings</button>
                 </div>
 
+                <!-- System Information Card -->
                 <div class="card">
                     <h3>System Information</h3>
                     <div class="system-info">
@@ -276,7 +275,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> <!-- FIXED: Closing settings tab -->
 
             <!-- Tool Content Area (Same as user dashboard) -->
             <div class="tool-container">
@@ -289,8 +288,8 @@
                     title="Calculation Tool"
                 ></iframe>
             </div>
-        </main>
-    </div>
+        </main> <!-- FIXED: Closing main tag -->
+    </div> <!-- FIXED: Closing admin-container -->
 
     <!-- Add User Modal -->
     <div id="userModal" class="modal">
@@ -356,19 +355,19 @@
 
     <!-- JavaScript -->
     <script src="js/admin.js"></script>
-    <!-- Add this right before closing body tag in admin.html -->
-<script>
-// Quick initialization fix
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Admin page loaded');
     
-    // Force reload users data after a short delay
-    setTimeout(() => {
-        if (window.adminPanel) {
-            window.adminPanel.loadUsersData();
-        }
-    }, 100);
-});
-</script>
+    <!-- Quick initialization fix -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Admin page loaded');
+        
+        // Force reload users data after a short delay
+        setTimeout(() => {
+            if (window.adminPanel) {
+                window.adminPanel.loadUsersData();
+            }
+        }, 100);
+    });
+    </script>
 </body>
-</html>
+    </html>
