@@ -1,5 +1,4 @@
-// Admin Panel Functionality for EasyCal - COMPLETELY FIXED
-
+// Admin Panel Functionality for EasyCal - REFINED & CLEAN
 class AdminPanel {
     constructor() {
         this.currentAdmin = null;
@@ -8,13 +7,15 @@ class AdminPanel {
     }
 
     init() {
-    this.checkAdminAuthentication();
-    this.loadAdminData();
-    this.loadUsersData();
-    this.setupEventListeners();
-    this.setupTabSystem();
-    this.setupModal();
-    this.updateStats();
+        console.log('🚀 Initializing Admin Panel...');
+        this.checkAdminAuthentication();
+        this.loadAdminData();
+        this.loadUsersData();
+        this.setupEventListeners();
+        this.setupTabSystem();
+        this.setupModal();
+        this.updateStats();
+        console.log('✅ Admin Panel initialized successfully');
     }
 
     // Check if user is admin
@@ -43,7 +44,7 @@ class AdminPanel {
         }
     }
 
-    // Load users data from localStorage - FIXED
+    // Load users data from localStorage
     loadUsersData() {
         try {
             const storedUsers = localStorage.getItem('easycal_users');
@@ -51,12 +52,11 @@ class AdminPanel {
             if (storedUsers && storedUsers !== 'undefined') {
                 this.users = JSON.parse(storedUsers);
             } else {
-                // Initialize with empty array if no users exist
                 this.users = [];
                 this.saveUsers();
             }
             
-            console.log('Loaded users:', this.users); // Debug log
+            console.log('Loaded users:', this.users.length);
             this.renderUsersTable();
         } catch (error) {
             console.error('Error loading users:', error);
@@ -65,36 +65,47 @@ class AdminPanel {
         }
     }
 
-// Save users to localStorage - ENHANCED WITH AUTO-BACKUP
- saveUsers() {
+    // Save users to localStorage
+    saveUsers() {
         try {
             localStorage.setItem('easycal_users', JSON.stringify(this.users));
-            console.log('Users saved:', this.users); // Debug log
+            console.log('Users saved:', this.users.length);
+            return true;
         } catch (error) {
             console.error('Error saving users:', error);
+            return false;
         }
- }
+    }
 
-    // Setup event listeners - FIXED
+    // Setup event listeners - FIXED TYPO
     setupEventListeners() {
-        // Logout button
+        console.log('Setting up event listeners...');
+        
+        // Logout button - FIXED: Corrected typo "addEventLitener" to "addEventListener"
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
-            logoutBtn.addEventLitener('click', () => {
+            logoutBtn.addEventListener('click', () => {
+                console.log('Logout button clicked');
                 this.logout();
             });
+        } else {
+            console.error('Logout button not found!');
         }
 
         // Add user button
         const addUserBtn = document.getElementById('addUserBtn');
         if (addUserBtn) {
             addUserBtn.addEventListener('click', () => {
+                console.log('Add user button clicked');
                 this.openAddUserModal();
             });
+        } else {
+            console.error('Add user button not found!');
         }
 
-        // Make functions globally available
+        // Make adminPanel globally available
         window.adminPanel = this;
+        console.log('✅ Event listeners setup completed');
     }
 
     // Setup tab system
@@ -106,6 +117,7 @@ class AdminPanel {
                 e.preventDefault();
                 
                 const tabId = link.getAttribute('data-tab');
+                console.log('Tab clicked:', tabId);
                 this.switchTab(tabId);
                 
                 // Update active states
@@ -134,7 +146,7 @@ class AdminPanel {
         }
     }
 
-    // Setup modal functionality - FIXED
+    // Setup modal functionality
     setupModal() {
         const modal = document.getElementById('userModal');
         const closeBtn = document.querySelector('.close');
@@ -148,6 +160,7 @@ class AdminPanel {
 
         // Close modal
         const closeModal = () => {
+            console.log('Closing modal');
             modal.style.display = 'none';
             userForm.reset();
             document.getElementById('editUserId').value = '';
@@ -166,19 +179,23 @@ class AdminPanel {
         // Form submission
         userForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            console.log('User form submitted');
             this.saveUser();
         });
 
-        console.log('Modal setup completed');
+        console.log('✅ Modal setup completed');
     }
 
-    // Open add user modal - FIXED
+    // Open add user modal
     openAddUserModal() {
+        console.log('Opening add user modal...');
+        
         const modal = document.getElementById('userModal');
         const modalTitle = document.getElementById('modalTitle');
         
         if (!modal || !modalTitle) {
-            console.error('Modal elements not found');
+            console.error('Modal elements not found!');
+            alert('Error: Modal not available');
             return;
         }
         
@@ -187,9 +204,7 @@ class AdminPanel {
         
         // Reset form
         const userForm = document.getElementById('userForm');
-        if (userForm) {
-            userForm.reset();
-        }
+        if (userForm) userForm.reset();
         
         // Set default expiry date to 30 days from now
         const defaultExpiry = new Date();
@@ -200,10 +215,10 @@ class AdminPanel {
         }
         
         modal.style.display = 'block';
-        console.log('Add user modal opened');
+        console.log('✅ Add user modal opened successfully');
     }
 
-    // Open edit user modal - FIXED
+    // Open edit user modal
     openEditUserModal(userId) {
         console.log('Opening edit modal for user:', userId);
         const user = this.users.find(u => u.id === userId);
@@ -216,23 +231,23 @@ class AdminPanel {
         const modalTitle = document.getElementById('modalTitle');
         
         if (!modal || !modalTitle) {
-            console.error('Modal elements not found');
+            console.error('Modal elements not found!');
             return;
         }
         
         modalTitle.textContent = 'Edit User';
         document.getElementById('editUserId').value = user.id;
-        document.getElementById('userName').value = user.name;
-        document.getElementById('userPhone').value = user.phone;
-        document.getElementById('userPassword').value = user.password;
-        document.getElementById('userExpiry').value = user.expiryDate;
+        document.getElementById('userName').value = user.name || '';
+        document.getElementById('userPhone').value = user.phone || '';
+        document.getElementById('userPassword').value = user.password || '';
+        document.getElementById('userExpiry').value = user.expiryDate || '';
         document.getElementById('userCustomLink').value = user.customLink || '';
         
         modal.style.display = 'block';
-        console.log('Edit user modal opened for:', user.name);
+        console.log('✅ Edit user modal opened for:', user.name);
     }
 
-    // Save user (add or edit) - COMPLETELY FIXED
+    // Save user (add or edit)
     saveUser() {
         console.log('Save user function called');
         
@@ -311,7 +326,7 @@ class AdminPanel {
         }
     }
 
-    // Delete user - FIXED
+    // Delete user
     deleteUser(userId) {
         console.log('Delete user called:', userId);
         if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
@@ -323,13 +338,40 @@ class AdminPanel {
         }
     }
 
+    // View user details
+    viewUserDetails(userId) {
+        const user = this.users.find(u => u.id === userId);
+        if (!user) {
+            alert('User not found!');
+            return;
+        }
+
+        let details = `User Details:\n\n`;
+        details += `Name: ${user.name}\n`;
+        details += `Phone: ${user.phone}\n`;
+        details += `Expiry Date: ${this.formatDate(user.expiryDate)}\n`;
+        details += `Status: ${this.isUserExpired(user.expiryDate) ? 'EXPIRED' : 'ACTIVE'}\n`;
+        details += `Custom Link: ${user.customLink || 'Not set'}\n\n`;
+        details += `Login History:\n`;
+        
+        if (user.loginHistory && user.loginHistory.length > 0) {
+            user.loginHistory.forEach((session, index) => {
+                details += `${index + 1}. ${this.formatDateTime(session.login)} to ${this.formatDateTime(session.logout || 'Still logged in')}\n`;
+            });
+        } else {
+            details += 'No login history available\n';
+        }
+
+        alert(details);
+    }
+
     // Validate phone number
     validatePhone(phone) {
         const phoneRegex = /^[0-9]{10,11}$/;
         return phoneRegex.test(phone);
     }
 
-    // Render users table - FIXED
+    // Render users table
     renderUsersTable() {
         const tbody = document.getElementById('usersTableBody');
         if (!tbody) {
@@ -353,7 +395,7 @@ class AdminPanel {
         }
 
         this.users.forEach(user => {
-            if (user.role === 'user') { // Don't show admin users
+            if (user.role === 'user') {
                 const row = document.createElement('tr');
                 
                 const status = this.isUserExpired(user.expiryDate) ? 'expired' : 'active';
@@ -386,34 +428,7 @@ class AdminPanel {
             }
         });
         
-        console.log('Users table rendered successfully');
-    }
-
-    // View user details
-    viewUserDetails(userId) {
-        const user = this.users.find(u => u.id === userId);
-        if (!user) {
-            alert('User not found!');
-            return;
-        }
-
-        let details = `User Details:\n\n`;
-        details += `Name: ${user.name}\n`;
-        details += `Phone: ${user.phone}\n`;
-        details += `Expiry Date: ${this.formatDate(user.expiryDate)}\n`;
-        details += `Status: ${this.isUserExpired(user.expiryDate) ? 'EXPIRED' : 'ACTIVE'}\n`;
-        details += `Custom Link: ${user.customLink || 'Not set'}\n\n`;
-        details += `Login History:\n`;
-        
-        if (user.loginHistory && user.loginHistory.length > 0) {
-            user.loginHistory.forEach((session, index) => {
-                details += `${index + 1}. ${this.formatDateTime(session.login)} to ${this.formatDateTime(session.logout || 'Still logged in')}\n`;
-            });
-        } else {
-            details += 'No login history available\n';
-        }
-
-        alert(details);
+        console.log('✅ Users table rendered successfully');
     }
 
     // Check if user is expired
@@ -423,7 +438,7 @@ class AdminPanel {
         return expiryDate < today;
     }
 
-    // Update statistics - FIXED
+    // Update statistics
     updateStats() {
         const totalUsers = this.users.filter(u => u.role === 'user').length;
         const activeUsers = this.users.filter(u => u.role === 'user' && !this.isUserExpired(u.expiryDate)).length;
@@ -455,7 +470,7 @@ class AdminPanel {
         this.renderRecentActivity();
     }
 
-    // Render recent activity - FIXED
+    // Render recent activity
     renderRecentActivity() {
         const activityList = document.getElementById('activityList');
         if (!activityList) return;
@@ -529,6 +544,8 @@ class AdminPanel {
 
     // Logout admin
     logout() {
+        console.log('Logging out admin...');
+        
         // Store logout time
         const loginTime = localStorage.getItem('loginTime');
         if (loginTime && this.currentAdmin) {
@@ -548,19 +565,25 @@ class AdminPanel {
 
 // Initialize admin panel when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initializing Admin Panel...');
+    console.log('DOM loaded, initializing Admin Panel...');
     window.adminPanel = new AdminPanel();
 });
 
-// Make functions globally available
-window.openAddUserModal = () => {
+// Global functions for HTML onclick attributes
+window.openAddUserModal = function() {
     if (window.adminPanel) {
         window.adminPanel.openAddUserModal();
+    } else {
+        console.error('adminPanel not initialized!');
+        alert('Admin panel not ready. Please refresh the page.');
     }
 };
 
-window.openEditUserModal = (userId) => {
+window.openEditUserModal = function(userId) {
     if (window.adminPanel) {
         window.adminPanel.openEditUserModal(userId);
+    } else {
+        console.error('adminPanel not initialized!');
+        alert('Admin panel not ready. Please refresh the page.');
     }
 };
