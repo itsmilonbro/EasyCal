@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Size Wood Calculation System by AL-Madina Traders: Calculate board feet for 6" and 5" shuttering woods and Dasa easily.">
+  <title>Size Wood Calculation System | AL-Madina Traders</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+    h1, h2 { text-align: center; margin-bottom: 10px; }
+    .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+    .controls label { font-weight: bold; }
+    .controls input { padding: 5px; width: 120px; }
+    .controls button { padding: 6px 12px; cursor: pointer; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background: #f4f4f4; }
+    input[type="number"] { width: 100%; height: 100%; }
+    input[readonly] { background: #e9e9e9; max-width: 20%; }
+
+    .table-summary, .summary, .action-buttons { display: flex; justify-content: flex-end; gap: 15px; margin-bottom: 20px; }
+    .table-summary span, .summary span { font-weight: bold; }
+
+    .login-container { display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .login-box { border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
+    .hidden { display: none; }
+
+    @media (max-width: 600px) {
+      .controls, .summary, .table-summary, .action-buttons { flex-direction: column; align-items: stretch; }
+      .controls input, .summary input { width: 100%; }
+      input[readonly] { max-width: 15%; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+  <div id="loginSection" class="login-container">
+    <div class="login-box">
+      <h2>Login</h2>
+      <label>Username: <input type="text" id="username"></label><br><br>
+      <label>Password: <input type="password" id="password"></label><br><br>
+      <button id="loginBtn">Login</button>
+      <p id="loginMsg" style="color:red;"></p>
+    </div>
+  </div> -->
+
+  <div id="appSection" >
+    <h1> 1" Paka Size Wood Calculation System</h1>
+    <p> 1 soot over (1soot = 0.125) </p>
+    <div class="controls">
+      <label for="price">Price per C.F.T (BDT):</label>
+      <input id="price" type="number" step="0.01" placeholder="0.00">
+      <button id="resetBtn">Reset</button>
+    </div>
+
+    <section id="tables-container"></section>
+
+    <div class="summary" style="border:1px solid crimson;redius-border:20%;">
+      <span>Grand Total Quantity: <span id="grandQty">0</span> pcs</span>
+      <span>Grand Total C.F.T: <span id="grandCFT">0.000</span></span>
+      <span>Total Price (BDT): <span id="grandPrice">0.00</span></span>
+    </div>
+
+    <div class="action-buttons">
+      <button id="printBtn">Print / Save PDF</button>
+      <button id="excelBtn">Save Excel</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const tablesConfig = [
+      { display: '6" Wood', multiplier: 6, lengths: [10,9,8,7,6,5,4,3] },
+      { display: '5" Wood', multiplier: 5, lengths: [10,9,8,7,6,5,4,3] },
+      { display: '2" x 3" Dasa', multiplier: 6, lengths: [10,9,8,7,6,5,4,3] }
+    ];
+
+    const container = document.getElementById('tables-container');
+    const priceInput = document.getElementById('price');
+    const resetBtn = document.getElementById('resetBtn');
+    const grandQtyEl = document.getElementById('grandQty');
+    const grandCFTEl = document.getElementById('grandCFT');
+    const grandPriceEl = document.getElementById('grandPrice');
+
+    tablesConfig.forEach((cfg, idx) => {
+      const sec = document.createElement('section');
+      sec.innerHTML = `
+        <h2>${cfg.display}</h2>
+        <table>
+          <thead>
+            <tr><th>INCHI</th><th>SIZE (ft)</th><th>QUANTITY</th><th>C.F.T</th></tr>
+          </thead>
+          <tbody>
+            ${cfg.lengths.map(len => `
+              <tr data-mult="${cfg.multiplier}" data-len="${len}" data-idx="${idx}">
+                <td>${cfg.display}</td>
+                <td>${len}' - 0"</td>
+                <td><input type="number" min="0" step="1" class="qty"></td>
+                <td><input type="text" readonly class="cft" placeholder="0.000"></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="table-summary" data-idx-summary="${idx}">
+          <span>Total ${cfg.display}: </span>
+          <span><span class="sumQty">0</span> pcs</span>
+          <span><span class="sumCFT">0.000</span> C.F.T</span>
+        </div>
+      `;
+      container.appendChild(sec);
+    });
+
+    function calculate() {
+      let grandQty = 0, grandCFT = 0;
+      tablesConfig.forEach((_, idx) => {
+        let sumQty = 0, sumCFT = 0;
+        document.querySelectorAll(`tr[data-idx='${idx}']`).forEach(row => {
+          const mult = parseFloat(row.dataset.mult);
+          const len = parseFloat(row.dataset.len);
+          const qty = parseFloat(row.querySelector('.qty').value) || 0;
+          const cft = (mult * len * qty * 1.125) / 144;
+          row.querySelector('.cft').value = cft.toFixed(3);
+          sumQty += qty;
+          sumCFT += cft;
+        });
+        const sumBlock = document.querySelector(`.table-summary[data-idx-summary='${idx}']`);
+        sumBlock.querySelector('.sumQty').textContent = sumQty;
+        sumBlock.querySelector('.sumCFT').textContent = sumCFT.toFixed(3);
+        grandQty += sumQty;
+        grandCFT += sumCFT;
+      });
+      grandQtyEl.textContent = grandQty;
+      grandCFTEl.textContent = grandCFT.toFixed(3);
+      const price = parseFloat(priceInput.value) || 0;
+      grandPriceEl.textContent = (grandCFT * price).toFixed(2);
+    }
+
+    document.addEventListener('input', e => {
+      if (e.target.matches('.qty') || e.target === priceInput) calculate();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      priceInput.value = '';
+      document.querySelectorAll('.qty').forEach(i => i.value = '');
+      document.querySelectorAll('.cft').forEach(i => i.value = '0.000');
+      document.querySelectorAll('.sumQty').forEach(el => el.textContent = '0');
+      document.querySelectorAll('.sumCFT').forEach(el => el.textContent = '0.000');
+      grandQtyEl.textContent = '0';
+      grandCFTEl.textContent = '0.000';
+      grandPriceEl.textContent = '0.00';
+    });
+
+    document.getElementById('printBtn').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('excelBtn').addEventListener('click', () => {
+      let csvContent = "data:text/csv;charset=utf-8,INCHI,SIZE(ft),QUANTITY,CFT\n";
+      document.querySelectorAll('tbody tr').forEach(row => {
+        const inchi = row.cells[0].innerText;
+        const size = row.cells[1].innerText;
+        const qty = row.querySelector('.qty').value || '0';
+        const cft = row.querySelector('.cft').value || '0.000';
+        csvContent += `${inchi},${size},${qty},${cft}\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "wood_calculation.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Simple login for demo (username: admin, password: password)
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.addEventListener('click', () => {
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const msg = document.getElementById('loginMsg');
+      if(user === 'admin' && pass === '12345') {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('appSection').classList.remove('hidden');
+        msg.textContent = '';
+        calculate();
+      } else {
+        msg.textContent = 'Invalid Login ! Check User Id or Password';
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      document.getElementById('appSection').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    });
+
+    calculate();
+  </script>
+</body>
+  </html>￼Enter
