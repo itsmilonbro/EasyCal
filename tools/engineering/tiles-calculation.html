@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiles Estimate Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .calculator-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+
+        .result-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background: #f9fafc;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+            outline: none;
+        }
+
+        .dimensions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .dimensions > div {
+            flex: 1;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #444;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .result-value {
+            font-weight: 600;
+            color: #6a11cb;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .total-label {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .total-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .info-section {
+            padding: 20px;
+            background: #f9fafc;
+            border-top: 1px solid #eee;
+        }
+
+        .info-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .tips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .tip-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .tip-card h4 {
+            margin-bottom: 8px;
+            color: #6a11cb;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                flex-direction: column;
+            }
+            
+            .dimensions {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tiles Estimate Calculator</h1>
+            <p class="subtitle">Calculate exactly how many tiles you need for your project</p>
+          <p> Dev by Freelancer Milon</p>
+        </header>
+        
+        <div class="calculator-container">
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="room-length">Room Length (ft)</label>
+                    <input type="number" id="room-length" min="0" step="0.1" placeholder="e.g., 12">
+                </div>
+                
+                <div class="form-group">
+                    <label for="room-width">Room Width (ft)</label>
+                    <input type="number" id="room-width" min="0" step="0.1" placeholder="e.g., 10">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tile-size">Tile Size</label>
+                    <select id="tile-size">
+                        <option value="12">12" x 12" (1 sq ft)</option>
+                        <option value="18">18" x 18" (2.25 sq ft)</option>
+                        <option value="24">24" x 24" (4 sq ft)</option>
+                        <option value="custom">Custom Size</option>
+                    </select>
+                </div>
+                
+                <div id="custom-size" class="form-group" style="display: none;">
+                    <label>Custom Tile Dimensions</label>
+                    <div class="dimensions">
+                        <div>
+                            <input type="number" id="custom-length" min="1" step="0.1" placeholder="Length (inches)">
+                        </div>
+                        <div>
+                            <input type="number" id="custom-width" min="1" step="0.1" placeholder="Width (inches)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="waste-factor">Waste Factor</label>
+                    <select id="waste-factor">
+                        <option value="5">5% (Minimal waste)</option>
+                        <option value="10" selected>10% (Standard)</option>
+                        <option value="15">15% (Complex layout)</option>
+                        <option value="20">20% (Intricate pattern)</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="calculate-btn">Calculate Tiles Needed</button>
+            </div>
+            
+            <div class="result-section">
+                <div class="result-box">
+                    <h3 class="result-title">Estimate Results</h3>
+                    
+                    <div class="result-item">
+                        <span>Room Area:</span>
+                        <span class="result-value" id="room-area">0 sq ft</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span>Tile Size:</span>
+                        <span class="result-value" id="tile-size-result">0 sq ft</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span>Tiles Needed (without waste):</span>
+                        <span class="result-value" id="tiles-no-waste">0</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span>Waste Factor:</span>
+                        <span class="result-value" id="waste-percent">0%</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span>Additional Tiles for Waste:</span>
+                        <span class="result-value" id="waste-tiles">0</span>
+                    </div>
+                </div>
+                
+                <div class="total-box">
+                    <div class="total-label">Total Tiles Required</div>
+                    <div class="total-value" id="total-tiles">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h3 class="info-title">Helpful Tiling Tips</h3>
+            <div class="tips">
+                <div class="tip-card">
+                    <h4>Measure Accurately</h4>
+                    <p>Always measure your room at multiple points as walls may not be perfectly straight.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>Buy Extra Tiles</h4>
+                    <p>Purchase 10-15% extra tiles to account for cuts, breakage, and future repairs.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>Check Tile Batch</h4>
+                    <p>Ensure all tiles are from the same batch to maintain consistent color and size.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roomLengthInput = document.getElementById('room-length');
+            const roomWidthInput = document.getElementById('room-width');
+            const tileSizeSelect = document.getElementById('tile-size');
+            const customSizeDiv = document.getElementById('custom-size');
+            const customLengthInput = document.getElementById('custom-length');
+            const customWidthInput = document.getElementById('custom-width');
+            const wasteFactorSelect = document.getElementById('waste-factor');
+            const calculateBtn = document.getElementById('calculate-btn');
+            
+            const roomAreaSpan = document.getElementById('room-area');
+            const tileSizeResultSpan = document.getElementById('tile-size-result');
+            const tilesNoWasteSpan = document.getElementById('tiles-no-waste');
+            const wastePercentSpan = document.getElementById('waste-percent');
+            const wasteTilesSpan = document.getElementById('waste-tiles');
+            const totalTilesSpan = document.getElementById('total-tiles');
+            
+            // Show/hide custom size inputs
+            tileSizeSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customSizeDiv.style.display = 'block';
+                } else {
+                    customSizeDiv.style.display = 'none';
+                }
+            });
+            
+            // Calculate button click
+            calculateBtn.addEventListener('click', function() {
+                calculateTiles();
+            });
+            
+            function calculateTiles() {
+                // Get input values
+                const roomLength = parseFloat(roomLengthInput.value) || 0;
+                const roomWidth = parseFloat(roomWidthInput.value) || 0;
+                const wasteFactor = parseInt(wasteFactorSelect.value) || 10;
+                
+                // Calculate room area in square feet
+                const roomArea = roomLength * roomWidth;
+                
+                // Calculate tile area based on selection
+                let tileArea;
+                if (tileSizeSelect.value === 'custom') {
+                    const tileLength = parseFloat(customLengthInput.value) || 0;
+                    const tileWidth = parseFloat(customWidthInput.value) || 0;
+                    tileArea = (tileLength * tileWidth) / 144; // Convert from sq inches to sq feet
+                } else {
+                    const tileSize = parseInt(tileSizeSelect.value);
+                    tileArea = (tileSize * tileSize) / 144; // Convert from sq inches to sq feet
+                }
+                
+                // Calculate number of tiles needed
+                const tilesNeeded = roomArea / tileArea;
+                const wasteTiles = tilesNeeded * (wasteFactor / 100);
+                const totalTiles = Math.ceil(tilesNeeded + wasteTiles);
+                
+                // Update results
+                roomAreaSpan.textContent = `${roomArea.toFixed(2)} sq ft`;
+                tileSizeResultSpan.textContent = `${tileArea.toFixed(2)} sq ft`;
+                tilesNoWasteSpan.textContent = Math.ceil(tilesNeeded);
+                wastePercentSpan.textContent = `${wasteFactor}%`;
+                wasteTilesSpan.textContent = Math.ceil(wasteTiles);
+                totalTilesSpan.textContent = totalTiles;
+            }
+            
+            // Initialize with some example values
+            roomLengthInput.value = 12;
+            roomWidthInput.value = 10;
+            calculateTiles();
+        });
+    </script>
+</body>
+  </html>
