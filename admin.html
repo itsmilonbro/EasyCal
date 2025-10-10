@@ -8,20 +8,30 @@
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-    <!-- Header -->
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="mobile-logo">
+            <div class="logo">🛠️</div>
+            <span class="app-name">EasyCal Admin</span>
+        </div>
+        <button class="hamburger-menu" id="hamburgerMenu">☰</button>
+    </header>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <!-- Desktop Header -->
     <header class="admin-header">
         <div class="header-content">
             <div class="logo-section">
-                <img src="assets/images/logo.png" alt="EasyCal Logo" class="logo">
+                <div class="logo">🛠️</div>
                 <span class="app-name">EasyCal Admin</span>
             </div>
             
             <div class="admin-info">
                 <span class="welcome-text">Welcome, <span id="adminName">Admin</span></span>
                 <span class="admin-badge">Administrator</span>
-                <button id="logoutBtn" class="logout-btn">
-                    <span>Logout</span>
-                </button>
+                <button id="logoutBtn" class="logout-btn">Logout</button>
             </div>
         </div>
     </header>
@@ -35,9 +45,7 @@
                     <h3 class="menu-title">Navigation</h3>
                     <ul class="menu-list">
                         <li class="menu-item">
-                            <a href="dashboard.html" class="menu-link">
-                                🏠 User Dashboard
-                            </a>
+                            <a href="dashboard.html" class="menu-link">🏠 User Dashboard</a>
                         </li>
                     </ul>
                 </div>
@@ -46,56 +54,37 @@
                     <h3 class="menu-title">Admin Tools</h3>
                     <ul class="menu-list">
                         <li class="menu-item">
-                            <a href="#users" class="menu-link active" data-tab="users">
-                                👥 User Management
-                            </a>
+                            <a href="#users" class="menu-link active" data-tab="users">👥 User Management</a>
                         </li>
                         <li class="menu-item">
-                            <a href="#analytics" class="menu-link" data-tab="analytics">
-                                📊 Analytics
-                            </a>
+                            <a href="#analytics" class="menu-link" data-tab="analytics">📊 Analytics</a>
                         </li>
                         <li class="menu-item">
-                            <a href="#settings" class="menu-link" data-tab="settings">
-                                ⚙️ Settings
-                            </a>
+                            <a href="#settings" class="menu-link" data-tab="settings">⚙️ Settings</a>
                         </li>
                     </ul>
                 </div>
 
-                <!-- Same Tools Menu as User Dashboard -->
                 <div class="menu-section">
                     <h3 class="menu-title">Calculation Tools</h3>
                     <ul class="menu-list">
                         <li class="menu-item has-submenu">
-                            <span class="menu-link">
-                                🏗️ Construction Tools
-                                <span class="arrow">▼</span>
-                            </span>
+                            <span class="menu-link">🏗️ Construction Tools <span class="arrow">▼</span></span>
                             <ul class="submenu">
                                 <li><a href="tools/construction/concrete-bricks.html" target="toolFrame">Concrete Bricks Estimation</a></li>
                                 <li><a href="tools/construction/flooring.html" target="toolFrame">Flooring Calculator</a></li>
                                 <li><a href="tools/construction/paint-estimate.html" target="toolFrame">Paint Estimate</a></li>
                             </ul>
                         </li>
-
                         <li class="menu-item has-submenu">
-                            <span class="menu-link">
-                                🌲 Timber Tools
-                                <span class="arrow">▼</span>
-                            </span>
+                            <span class="menu-link">🌲 Timber Tools <span class="arrow">▼</span></span>
                             <ul class="submenu">
                                 <li><a href="tools/timber/sawn-timber.html" target="toolFrame">Sawn Timber Calculator</a></li>
                                 <li><a href="tools/timber/non-sawn.html" target="toolFrame">Non-Sawn Timber Calculator</a></li>
                             </ul>
                         </li>
-
-                        <!-- Other categories same as dashboard -->
                         <li class="menu-item has-submenu">
-                            <span class="menu-link">
-                                ⚙️ Engineering Tools
-                                <span class="arrow">▼</span>
-                            </span>
+                            <span class="menu-link">⚙️ Engineering Tools <span class="arrow">▼</span></span>
                             <ul class="submenu">
                                 <li><a href="tools/engineering/blank-tools.html" target="toolFrame">Unit Converter</a></li>
                                 <li><a href="tools/engineering/blank-tools.html" target="toolFrame">Geometry Calculator</a></li>
@@ -111,14 +100,13 @@
             <!-- Users Management Tab -->
             <div id="usersTab" class="tab-content active">
                 <div class="tab-header">
-                    <h1>User Management</h1>
-                    <p>Create, edit, and manage system users</p>
-                    <button id="addUserBtn" class="btn btn-primary">
-                        ➕ Add New User
-                    </button>
+                    <div>
+                        <h1>User Management</h1>
+                        <p>Create, edit, and manage system users</p>
+                    </div>
+                    <button id="addUserBtn" class="btn btn-primary">➕ Add New User</button>
                 </div>
 
-                <!-- Users Table -->
                 <div class="card">
                     <div class="table-container">
                         <table class="users-table">
@@ -133,7 +121,11 @@
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody">
-                                <!-- Users will be loaded here dynamically -->
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                                        Loading users...
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -178,86 +170,34 @@
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
                 <div class="card">
                     <h3>Recent User Activity</h3>
                     <div class="activity-list" id="activityList">
-                        <!-- Activity will be loaded here -->
+                        <p style="text-align: center; color: #7f8c8d; padding: 20px;">No recent activity</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Settings Tab --> <!-- FIXED: Added proper closing -->
+            <!-- Settings Tab -->
             <div id="settingsTab" class="tab-content">
                 <div class="tab-header">
                     <h1>System Settings</h1>
                     <p>Configure application settings and manage data</p>
                 </div>
 
-                <!-- Data Management Card 
-                <div class="card">
-                    <h3>📊 Data Management & Backup</h3>
-                    
-                    <div class="backup-info">
-                        <div class="info-item">
-                            <span class="info-label">Current Users:</span>
-                            <span class="info-value" id="userCount">0</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Last Backup:</span>
-                            <span class="info-value" id="lastBackupTime">Never</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Backup Status:</span>
-                            <span class="info-value" id="backupStatus">🟢 Active</span>
-                        </div>
-                    </div>
-
-                    <div class="backup-actions">
-                        <button class="btn btn-success" onclick="adminPanel.createBackup()">
-                            💾 Create Backup Now
-                        </button>
-                        <button class="btn btn-warning" onclick="adminPanel.restoreBackup()">
-                            🔄 Restore from Backup
-                        </button>
-                        <button class="btn btn-info" onclick="adminPanel.exportUsers()">
-                            📤 Export Users Data
-                        </button>
-                        <label class="btn btn-secondary">
-                            📥 Import Users Data
-                            <input type="file" id="importFile" accept=".json" style="display: none;" 
-                                   onchange="adminPanel.importUsers(event)">
-                        </label>
-                    </div>
-                    
-                    <div class="backup-tips">
-                        <h4>💡 Backup Tips:</h4>
-                        <ul>
-                            <li>Auto-backup runs every 30 seconds</li>
-                            <li>Backup is created when you switch tabs</li>
-                            <li>Export data for additional safety</li>
-                            <li>Restore if users disappear unexpectedly</li>
-                        </ul>
-                    </div>
-                </div> -->
-
-                <!-- Payment Settings Card -->
                 <div class="card">
                     <h3>Payment Settings</h3>
                     <div class="form-group">
                         <label for="paymentLink">Default Payment Link</label>
-                        <input type="url" id="paymentLink" class="form-control" 
-                               placeholder="https://your-payment-link.com">
+                        <input type="url" id="paymentLink" class="form-control" placeholder="https://your-payment-link.com">
                     </div>
                     <div class="form-group">
                         <label for="whatsappNumber">WhatsApp Support Number</label>
-                        <input type="tel" id="whatsappNumber" class="form-control" 
-                               placeholder="+1234567890">
+                        <input type="tel" id="whatsappNumber" class="form-control" placeholder="+1234567890">
                     </div>
                     <button class="btn btn-primary">Save Settings</button>
                 </div>
 
-                <!-- System Information Card -->
                 <div class="card">
                     <h3>System Information</h3>
                     <div class="system-info">
@@ -275,22 +215,14 @@
                         </div>
                     </div>
                 </div>
-            </div> <!-- FIXED: Closing settings tab -->
-
-            <!-- Tool Content Area (Same as user dashboard) -->
-            <div class="tool-container">
-                <iframe 
-                    id="toolFrame" 
-                    name="toolFrame" 
-                    src="welcome.html" 
-                    frameborder="0" 
-                    class="tool-iframe"
-                    title="Calculation Tool"
-                ></iframe>
-                
             </div>
-        </main> <!-- FIXED: Closing main tag -->
-    </div> <!-- FIXED: Closing admin-container -->
+
+            <!-- Tool Content Area -->
+            <div class="tool-container">
+                <iframe id="toolFrame" name="toolFrame" src="welcome.html" frameborder="0" class="tool-iframe" title="Calculation Tool"></iframe>
+            </div>
+        </main>
+    </div>
 
     <!-- Add User Modal -->
     <div id="userModal" class="modal">
@@ -304,22 +236,17 @@
                 
                 <div class="form-group">
                     <label for="userName">Full Name *</label>
-                    <input type="text" id="userName" class="form-control" required 
-                           placeholder="Enter user's full name">
+                    <input type="text" id="userName" class="form-control" required placeholder="Enter user's full name">
                 </div>
 
                 <div class="form-group">
                     <label for="userPhone">Phone Number *</label>
-                    <input type="tel" id="userPhone" class="form-control" required 
-                           placeholder="Enter 10-11 digit phone number"
-                           pattern="[0-9]{10,11}">
+                    <input type="tel" id="userPhone" class="form-control" required placeholder="Enter 10-11 digit phone number" pattern="[0-9]{10,11}">
                 </div>
 
                 <div class="form-group">
                     <label for="userPassword">Password *</label>
-                    <input type="password" id="userPassword" class="form-control" required 
-                           placeholder="Enter password (min 4 characters)"
-                           minlength="4">
+                    <input type="password" id="userPassword" class="form-control" required placeholder="Enter password (min 4 characters)" minlength="4">
                 </div>
 
                 <div class="form-group">
@@ -329,8 +256,7 @@
 
                 <div class="form-group">
                     <label for="userCustomLink">Custom Payment Link</label>
-                    <input type="url" id="userCustomLink" class="form-control" 
-                           placeholder="https://custom-payment-link.com/user123">
+                    <input type="url" id="userCustomLink" class="form-control" placeholder="https://custom-payment-link.com/user123">
                     <small>Leave empty to use default payment link</small>
                 </div>
 
@@ -354,21 +280,6 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script src="js/admin.js"></script>
-    
-    <!-- Quick initialization fix -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Admin page loaded');
-        
-        // Force reload users data after a short delay
-        setTimeout(() => {
-            if (window.adminPanel) {
-                window.adminPanel.loadUsersData();
-            }
-        }, 100);
-    });
-    </script>
 </body>
-    </html>
+                    </html>
