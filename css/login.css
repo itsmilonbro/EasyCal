@@ -9,7 +9,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow-x: hidden;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    position: relative;
+    position: relative; height:100vh;
 }
 
 /* Animated Background */
@@ -74,11 +74,11 @@ body {
 /* Login Container */
 .login-container {
     min-height: 100vh;
-    min-height: 95dvh; /* Mobile viewport height */
+    min-height: 100dvh; /* Mobile viewport height */
     display: flex;
     align-items: center;
     justify-content: center;
-  /*  padding: 20px;*/
+    padding: 20px;
     animation: fadeIn 1s ease-out;
 }
 
@@ -218,7 +218,7 @@ body {
 }
 
 .form-group {
-    margin-bottom: 18px; /* 25px*/
+    margin-bottom: 25px; /* 25px*/
     position: relative;
 }
 
@@ -239,7 +239,7 @@ body {
 
 .form-group input {
     width: 100%;
-    padding: 16px 30px 16px 16px; /* 16,50,16,16*/
+    padding: 16px 50px 16px 16px; /* 16,50,16,16*/
     border: 2px solid #e8ecf1;
     border-radius: 12px;
     font-size: 1em;
@@ -286,7 +286,7 @@ body {
     display: block;
     min-height: 15px;
     font-weight: 500;
-    animation: shake 1s ease-in-out; /*0.5s*/
+    animation: shake 1.0s ease-in-out; /*0.5s*/
 }
 
 @keyframes shake {
@@ -397,7 +397,7 @@ body {
     right: 0;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
-    padding: 10px 0; /*20, 0*/
+    padding: 10px 0px ;/*20,0*/
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -449,10 +449,11 @@ body {
 
     .login-container {
         min-height: 100vh;
-        min-height: 95dvh;
-        padding: 5px;/*15*/
+        min-height: 100dvh;
+        padding: 15px 5px 0px;/*15*/
         align-items: stretch;
         border-radius: 12px;
+        bottom: 0;
     }
 
     .login-card {
@@ -481,8 +482,8 @@ body {
     }
 
     .logo {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
     }
 
     .logo-section h1 {
@@ -494,7 +495,7 @@ body {
     }
 
     .form-group input {
-        padding: 18px 30px 18px 18px; /*18,50,18,18*/
+        padding: 18px 50px 18px 18px; /*18,50,18,18*/
         font-size: 16px; /* Prevent zoom on iOS */
     }
 
@@ -516,7 +517,7 @@ body {
         position: relative;
         background: transparent;
         backdrop-filter: none;
-        padding: 20px 15px;
+        padding: 0px 15px; /*10,15*/
         margin-top: auto;
     }
 
