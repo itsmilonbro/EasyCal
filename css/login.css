@@ -286,12 +286,12 @@ body {
     display: block;
     min-height: 15px;
     font-weight: 500;
-    animation: shake 1.0s ease-in-out; /*0.5s*/
+    animation: shake 0.5s ease-in-out; /*0.5s*/
 }
 
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
+    25% { transform: translateX(-10px); }
     75% { transform: translateX(8px); }
 }
 
@@ -450,7 +450,7 @@ body {
     .login-container {
         min-height: 100vh;
         min-height: 100dvh;
-        padding: 15px 5px 0px;/*15*/
+        padding: 20px 5px 0px;/*15*/
         align-items: stretch;
         border-radius: 12px;
         bottom: 0;
