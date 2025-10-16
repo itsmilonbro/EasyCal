@@ -74,11 +74,11 @@ body {
 /* Login Container */
 .login-container {
     min-height: 100vh;
-    min-height: 100dvh-20px; /* Mobile viewport height */
+    min-height: 95dvh; /* Mobile viewport height */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+  /*  padding: 20px;*/
     animation: fadeIn 1s ease-out;
 }
 
@@ -449,8 +449,8 @@ body {
 
     .login-container {
         min-height: 100vh;
-        min-height: 100dvh -20px;
-       padding: 5px;/*15*/
+        min-height: 95dvh;
+        padding: 5px;/*15*/
         align-items: stretch;
         border-radius: 12px;
     }
