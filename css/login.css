@@ -9,7 +9,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow-x: hidden;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    position: relative; height:100vh;
+    position: relative;
 }
 
 /* Animated Background */
@@ -148,8 +148,8 @@ body {
 }
 
 .logo {
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 15px;
@@ -445,6 +445,7 @@ body {
         height: 100vh;
         height: 100dvh;
         overflow: hidden;
+        margin: 0 auto;
     }
 
     .login-container {
@@ -452,8 +453,6 @@ body {
         min-height: 100dvh;
         padding: 15px 5px 0px;/*15*/
         align-items: stretch;
-        border-radius: 12px;
-        bottom: 0;
     }
 
     .login-card {
