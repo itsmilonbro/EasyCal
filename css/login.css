@@ -74,7 +74,7 @@ body {
 /* Login Container */
 .login-container {
     min-height: 100vh;
-    min-height: 100dvh; /* Mobile viewport height */
+    min-height: 100dvh-20px; /* Mobile viewport height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,7 +102,7 @@ body {
         0 25px 50px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(255, 255, 255, 0.1);
     width: 100%;
-    max-width: 440px;
+    max-width: 500px;/*440*/
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -218,7 +218,7 @@ body {
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 18px; /* 25px*/
     position: relative;
 }
 
@@ -239,7 +239,7 @@ body {
 
 .form-group input {
     width: 100%;
-    padding: 16px 50px 16px 16px;
+    padding: 16px 30px 16px 16px; /* 16,50,16,16*/
     border: 2px solid #e8ecf1;
     border-radius: 12px;
     font-size: 1em;
@@ -281,18 +281,18 @@ body {
 
 .error-message {
     color: #e74c3c;
-    font-size: 0.8em;
+    font-size: 0.9em;
     margin-top: 8px;
     display: block;
     min-height: 15px;
     font-weight: 500;
-    animation: shake 0.5s ease-in-out;
+    animation: shake 1s ease-in-out; /*0.5s*/
 }
 
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
 }
 
 /* Buttons */
@@ -397,7 +397,7 @@ body {
     right: 0;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
-    padding: 20px 0;
+    padding: 10px 0; /*20, 0*/
     text-align: center;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -449,9 +449,10 @@ body {
 
     .login-container {
         min-height: 100vh;
-        min-height: 100dvh;
-        padding: 15px;
+        min-height: 100dvh -20px;
+       padding: 5px;/*15*/
         align-items: stretch;
+        border-radius: 12px;
     }
 
     .login-card {
@@ -493,7 +494,7 @@ body {
     }
 
     .form-group input {
-        padding: 18px 50px 18px 18px;
+        padding: 18px 30px 18px 18px; /*18,50,18,18*/
         font-size: 16px; /* Prevent zoom on iOS */
     }
 
