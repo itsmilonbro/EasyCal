@@ -70,7 +70,7 @@ function loginUser(phone, password) {
     const defaultUsers = [
         {
             id: '1',
-            phone: '0123456789',
+            phone: '12345678910',
             password: '1234',
             name: 'Demo User',
             role: 'user',
@@ -86,6 +86,36 @@ function loginUser(phone, password) {
             role: 'admin',
             expiryDate: '2099-12-31',
             customLink: '',
+            loginHistory: []
+        },
+        {
+            id: '3',
+            phone: '01955255066',
+            password: '123456',
+            name: 'System Admin-2 Manual Athr.js',
+            role: 'admin',
+            expiryDate: '2030-12-31',
+            customLink: 'https://facebook.com/itsmilonbro',
+            loginHistory: []
+        },
+        {
+            id: '4',
+            phone: '01955255077',
+            password: '12345',
+            name: 'Manuul User -ID 4- Manual Athr.js',
+            role: 'user',
+            expiryDate: '2030-12-31',
+            customLink: 'manual user link customLink',
+            loginHistory: []
+        },
+                {
+            id: '5',
+            phone: '01955255088',
+            password: '12345',
+            name: 'Manuul User Expired-ID 4- Manual Athr.js',
+            role: 'user',
+            expiryDate: '2020-12-29',
+            customLink: 'manual user link customLink',
             loginHistory: []
         }
     ];
@@ -105,12 +135,12 @@ function loginUser(phone, password) {
     
     if (!user) {
         console.log('User not found for phone:', phone);
-        throw new Error('Phone number not registered');
+        throw new Error(' 📵 Phone number not registered');
     }
     
     if (user.password !== password) {
         console.log('Invalid password for user:', user.name);
-        throw new Error('Invalid password');
+        throw new Error('⛔ Password wrong -Check your Password');
     }
     
     // Check if user is expired
@@ -181,12 +211,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let isValid = true;
             
             if (!validatePhone(phone)) {
-                showError(phoneError, 'Please enter a valid 10-11 digit phone number');
+                showError(phoneError, 'Please enter a valid 11 digit phone number');
                 isValid = false;
             }
             
             if (!validatePassword(password)) {
-                showError(passwordError, 'Password must be at least 4 characters long');
+                showError(passwordError, 'Password must be at least 4 characters');
                 isValid = false;
             }
             
@@ -250,12 +280,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Auto-fill demo credentials for testing
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('demo') === 'user') {
-            phoneInput.value = '0123456789';
+            phoneInput.value = '12345678910';
             passwordInput.value = '1234';
         }
         if (urlParams.get('demo') === 'admin') {
             phoneInput.value = '01955255066';
-            passwordInput.value = '12345';
+            passwordInput.value = '1234';
         }
     }
 
