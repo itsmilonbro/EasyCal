@@ -67,9 +67,9 @@ class PaymentPage {
         // WhatsApp button with dynamic message
         const whatsappBtn = document.querySelector('.whatsapp-btn');
         if (whatsappBtn && this.expiredUser) {
-            const message = `Hello EasyCal Support, I need help with payment renewal for user: ${this.expiredUser.name} (${this.expiredUser.phone})`;
+            const message = `Hello EasyCal Support, I need help with payment renewal my Subscriptions for user: ${this.expiredUser.name} (${this.expiredUser.phone})`;
             const encodedMessage = encodeURIComponent(message);
-            whatsappBtn.href = `https://wa.me/+881955255066?text=${encodedMessage}`;
+            whatsappBtn.href = `https://wa.me/+8801955255066?text=${encodedMessage}`;
         }
 
         // Refresh status button
