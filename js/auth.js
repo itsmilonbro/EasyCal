@@ -117,7 +117,18 @@ function loginUser(phone, password) {
             expiryDate: '2020-12-29',
             customLink: 'manual user link customLink',
             loginHistory: []
-        }
+        }, 
+        
+              {
+            id: '6',
+            phone: '01736245924',
+            password: '12345',
+            name: 'Mofijul Islam Sagor',
+            role: 'user',
+            expiryDate: '2026-01-30',
+            customLink: 'https://facebook.com/almadinatraders.savar/',
+            loginHistory: []
+                }
     ];
     
     // Combine all users - prioritize stored users over defaults
