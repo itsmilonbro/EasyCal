@@ -82,7 +82,7 @@ function loginUser(phone, password) {
             id: '2',
             phone: '01955255066',
             password: '12345',
-            name: 'System Admin',
+            name: 'System Admin -Freelancer Milon',
             role: 'admin',
             expiryDate: '2099-12-31',
             customLink: '',
@@ -92,9 +92,9 @@ function loginUser(phone, password) {
             id: '3',
             phone: '01955255066',
             password: '123456',
-            name: 'System Admin-2 Manual Athr.js',
-            role: 'admin',
-            expiryDate: '2030-12-31',
+            name: 'Milon Hossain',
+            role: 'user',
+            expiryDate: '2099-12-31',
             customLink: 'https://facebook.com/itsmilonbro',
             loginHistory: []
         },
@@ -136,7 +136,7 @@ function loginUser(phone, password) {
             password: '12345',
             name: 'Ikram Hossain',
             role: 'user',
-            expiryDate: '2026-01-20',
+            expiryDate: '2026-01-15',
             customLink: 'https://tally.pe/bBtgL',
             loginHistory: []
                 }
@@ -157,7 +157,7 @@ function loginUser(phone, password) {
     
     if (!user) {
         console.log('User not found for phone:', phone);
-        throw new Error(' 📵 Phone number not registered');
+        throw new Error('📵 Phone number not registered');
     }
     
     if (user.password !== password) {
