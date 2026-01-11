@@ -128,6 +128,17 @@ function loginUser(phone, password) {
             expiryDate: '2026-01-30',
             customLink: 'https://facebook.com/almadinatraders.savar/',
             loginHistory: []
+                }, 
+        
+              {
+            id: '7',
+            phone: '01930186776',
+            password: '12345',
+            name: 'Ikram Hossain',
+            role: 'user',
+            expiryDate: '2026-01-20',
+            customLink: 'https://tally.pe/bBtgL',
+            loginHistory: []
                 }
     ];
     
