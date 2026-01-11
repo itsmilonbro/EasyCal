@@ -45,25 +45,64 @@ class AdminPanel {
     }
 
     // Load users data from localStorage
-    loadUsersData() {
-        try {
-            const storedUsers = localStorage.getItem('easycal_users');
+    // loadUsersData() {
+    //    try {
+        //    const storedUsers = localStorage.getItem('easycal_users');
             
-            if (storedUsers && storedUsers !== 'undefined') {
-                this.users = JSON.parse(storedUsers);
-            } else {
-                this.users = [];
-                this.saveUsers();
-            }
+          //  if (storedUsers && storedUsers !== 'undefined') {
+         //       this.users = JSON.parse(storedUsers);
+           // } else {
+            //    this.users = [];
+              //  this.saveUsers();
+        //    }
             
-            console.log('Loaded users:', this.users.length);
-            this.renderUsersTable();
-        } catch (error) {
-            console.error('Error loading users:', error);
-            this.users = [];
-            this.saveUsers();
-        }
+          //  console.log('Loaded users:', this.users.length);
+        //    this.renderUsersTable();
+   //     } catch (error) {
+        //    console.error('Error loading users:', error);
+          //  this.users = [];
+        //    this.saveUsers();
+    //    }
+//    }
+
+// New added for user both storage showing admin dashboard
+import { defaultUsers } from "./auth.js";
+
+loadUsersData() {
+  try {
+    // Load from localStorage
+    const storedUsers = localStorage.getItem("easycal_users");
+    let localUsers = [];
+
+    if (storedUsers && storedUsers !== "undefined") {
+      localUsers = JSON.parse(storedUsers);
+    } else {
+      localUsers = [];
+      localStorage.setItem("easycal_users", JSON.stringify(localUsers));
     }
+
+    // Merge localStorage users + auth.js users
+    const mergedUsers = [...localUsers];
+
+    defaultUsers.forEach(u => {
+      if (!mergedUsers.find(lu => lu.phone === u.phone)) {
+        mergedUsers.push(u);
+      }
+    });
+
+    this.users = mergedUsers;
+
+    console.log("Loaded users:", this.users.length);
+    this.renderUsersTable();
+  } catch (error) {
+    console.error("Error loading users:", error);
+    this.users = [];
+    localStorage.setItem("easycal_users", JSON.stringify([]));
+    this.renderUsersTable();
+  }
+}
+
+
 
     // Save users to localStorage
     saveUsers() {
