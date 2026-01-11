@@ -1,5 +1,79 @@
 // Authentication System for EasyCal - UPDATED & FIXED
 
+// 🔹 Default users moved to top-level and exported New Updated - 12-01-26 v1.01
+export const defaultUsers = [
+    {
+        id: '1',
+        phone: '12345678910',
+        password: '1234',
+        name: 'Demo User',
+        role: 'user',
+        expiryDate: '2024-12-31',
+        customLink: 'https://payment-link.com/user123',
+        loginHistory: []
+    },
+    {
+        id: '2',
+        phone: '01955255066',
+        password: '12345',
+        name: 'System Admin -Freelancer Milon',
+        role: 'admin',
+        expiryDate: '2099-12-31',
+        customLink: '',
+        loginHistory: []
+    },
+    {
+        id: '3',
+        phone: '01955255066',
+        password: '123456',
+        name: 'Milon Hossain',
+        role: 'user',
+        expiryDate: '2099-12-31',
+        customLink: 'https://facebook.com/itsmilonbro',
+        loginHistory: []
+    },
+    {
+        id: '4',
+        phone: '01955255077',
+        password: '12345',
+        name: 'Manual User -ID 4- Manual Auth.js',
+        role: 'user',
+        expiryDate: '2030-12-31',
+        customLink: 'manual user link customLink',
+        loginHistory: []
+    },
+    {
+        id: '5',
+        phone: '01955255088',
+        password: '12345',
+        name: 'Manual User Expired -ID 5- Manual Auth.js',
+        role: 'user',
+        expiryDate: '2020-12-29',
+        customLink: 'manual user link customLink',
+        loginHistory: []
+    },
+    {
+        id: '6',
+        phone: '01736245924',
+        password: '12345',
+        name: 'Mofijul Islam Sagor',
+        role: 'user',
+        expiryDate: '2026-01-30',
+        customLink: 'https://facebook.com/almadinatraders.savar/',
+        loginHistory: []
+    },
+    {
+        id: '7',
+        phone: '01930186776',
+        password: '12345',
+        name: 'Ikram Hossain',
+        role: 'user',
+        expiryDate: '2026-01-15',
+        customLink: 'https://tally.pe/bBtgL',
+        loginHistory: []
+    }
+];
+
 // Utility Functions
 function showError(element, message) {
     element.textContent = message;
@@ -65,82 +139,6 @@ function loginUser(phone, password) {
             allUsers = [];
         }
     }
-    
-    // Also include the default demo users
-    const defaultUsers = [
-        {
-            id: '1',
-            phone: '12345678910',
-            password: '1234',
-            name: 'Demo User',
-            role: 'user',
-            expiryDate: '2024-12-31',
-            customLink: 'https://payment-link.com/user123',
-            loginHistory: []
-        },
-        {
-            id: '2',
-            phone: '01955255066',
-            password: '12345',
-            name: 'System Admin -Freelancer Milon',
-            role: 'admin',
-            expiryDate: '2099-12-31',
-            customLink: '',
-            loginHistory: []
-        },
-        {
-            id: '3',
-            phone: '01955255066',
-            password: '123456',
-            name: 'Milon Hossain',
-            role: 'user',
-            expiryDate: '2099-12-31',
-            customLink: 'https://facebook.com/itsmilonbro',
-            loginHistory: []
-        },
-        {
-            id: '4',
-            phone: '01955255077',
-            password: '12345',
-            name: 'Manuul User -ID 4- Manual Athr.js',
-            role: 'user',
-            expiryDate: '2030-12-31',
-            customLink: 'manual user link customLink',
-            loginHistory: []
-        },
-                {
-            id: '5',
-            phone: '01955255088',
-            password: '12345',
-            name: 'Manuul User Expired-ID 4- Manual Athr.js',
-            role: 'user',
-            expiryDate: '2020-12-29',
-            customLink: 'manual user link customLink',
-            loginHistory: []
-        }, 
-        
-              {
-            id: '6',
-            phone: '01736245924',
-            password: '12345',
-            name: 'Mofijul Islam Sagor',
-            role: 'user',
-            expiryDate: '2026-01-30',
-            customLink: 'https://facebook.com/almadinatraders.savar/',
-            loginHistory: []
-                }, 
-        
-              {
-            id: '7',
-            phone: '01930186776',
-            password: '12345',
-            name: 'Ikram Hossain',
-            role: 'user',
-            expiryDate: '2026-01-15',
-            customLink: 'https://tally.pe/bBtgL',
-            loginHistory: []
-                }
-    ];
     
     // Combine all users - prioritize stored users over defaults
     const combinedUsers = [...allUsers];
@@ -293,7 +291,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 login: new Date().toISOString(),
                 logout: null
             });
-            localStorage.setItem('easycal_users', JSON.stringify(users));
+
+localStorage.setItem('easycal_users', JSON.stringify(users));
         }
     }
 
