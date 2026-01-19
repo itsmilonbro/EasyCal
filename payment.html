@@ -66,12 +66,12 @@
 
                 <!-- Bank Transfer -->
                 <div class="payment-method">
-                    <h3>🏦 Bank Transfer</h3>
+                    <h3>🏦 Mobile Banking</h3>
                     <div class="bank-details">
                         <div class="bank-info">
-                            <strong>Bank:</strong> Example Bank<br>
-                            <strong>Account:</strong> 1234 5678 9012<br>
-                            <strong>Name:</strong> EasyCal Solutions<br>
+                            <strong>Send Money:</strong>Bkash/Roket/Nagad<br>
+                            <strong>Account No:</strong> 01955-255 066<br>
+                            <strong>Name:</strong> EasyCal Solutions -Milon Hossain<br>
                             <strong>Reference:</strong> <span id="userReference">-</span>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                     <li>Complete the payment process</li>
                     <li>Take a screenshot of payment confirmation</li>
                     <li>Contact support with your payment proof</li>
-                    <li>Your account will be activated within 1-2 hours</li>
+                    <li>Your account will be activated within 30 Minutes</Li>
                 </ol>
             </div>
 
@@ -125,5 +125,21 @@
     </footer>
 
     <script type="module" src="js/payment.js"></script>
+
+<!-- Add this before closing </body> tag -->
+<script>
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('EasyCal Payment: Service Worker registered');
+      })
+      .catch(error => {
+        console.log('EasyCal Payment: Service Worker registration failed:', error);
+      });
+  });
+}
+</script>
 </body>
               </html>
