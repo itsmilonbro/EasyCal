@@ -92,7 +92,7 @@
             <div class="footer-links">
                 <a href="#">Privacy Policy</a> | 
                 <a href="#">Terms of Service</a> | 
-                <a href="https://wa.me/8801955255066">Contact Support</a>
+                <a href="https://wa.me/8801955255066?text=Need Support for EasyCal WebApp">Contact Support</a>
             </div>
         </div>
     </footer>
@@ -101,5 +101,32 @@
   <!-- old ver  <script src="js/auth.js"></script> -->
   <!-- Update new -->
 <script type="module" src="js/auth.js"></script>
+
+<!-- added PWA feture - service-worker  -->
+<script>
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/EasyCal/service-worker.js')
+      .then(registration => {
+        console.log('EasyCal: Service Worker registered with scope:', registration.scope);
+        
+        // Check for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          console.log('EasyCal: New Service Worker found');
+        });
+      })
+      .catch(error => {
+        console.log('EasyCal: Service Worker registration failed:', error);
+      });
+  });
+}
+
+// Request notification permission
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+</script>
 </body>
             </html>
