@@ -24,7 +24,7 @@ export const defaultUsers = [
     },
     {
         id: '3',
-        phone: '01955255066',
+        phone: '01955255067',
         password: '123456',
         name: 'Milon Hossain',
         role: 'user',
@@ -305,10 +305,102 @@ localStorage.setItem('easycal_users', JSON.stringify(users));
             passwordInput.value = '1234';
         }
         if (urlParams.get('demo') === 'admin') {
-            phoneInput.value = '01955255066';
+            phoneInput.value = '01955255065';
             passwordInput.value = '1234';
         }
     }
 
     checkExistingLogin();
+});
+//Add PWA Feature 
+// Enhanced expiry checking with PWA features
+function setupExpiryMonitoring() {
+  // Check expiry on page load
+  checkCurrentUserExpiry();
+  
+  // Check every hour
+  setInterval(checkCurrentUserExpiry, 60 * 60 * 1000);
+  
+  // Listen for service worker messages
+  if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data.type === 'CHECK_EXPIRY') {
+        checkCurrentUserExpiry();
+      }
+    });
+  }
+}
+
+function checkCurrentUserExpiry() {
+  const userData = localStorage.getItem('currentUser');
+  if (!userData) return;
+  
+  const user = JSON.parse(userData);
+  if (user.role === 'admin') return; // Admins don't expire
+  
+  const today = new Date().toISOString().split('T')[0];
+  const expiryDate = user.expiryDate;
+  
+  if (!expiryDate) return;
+  
+  // Check if expired
+  if (expiryDate < today) {
+    localStorage.setItem('expiredUser', JSON.stringify(user));
+    
+    // Show notification
+    showExpiryNotification('expired', expiryDate);
+    
+    // Redirect if on dashboard
+    if (window.location.pathname.includes('dashboard.html')) {
+      setTimeout(() => window.location.href = 'payment.html', 1000);
+    }
+    return;
+  }
+  
+  // Check if expiring in 3 days
+  const threeDaysFromNow = new Date();
+  threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+  const threeDaysFromNowStr = threeDaysFromNow.toISOString().split('T')[0];
+  
+  if (expiryDate <= threeDaysFromNowStr) {
+    showExpiryNotification('warning', expiryDate);
+  }
+}
+
+function showExpiryNotification(type, expiryDate) {
+  const formattedDate = new Date(expiryDate).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  if (type === 'expired') {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('EasyCal Subscription Expired', {
+        body: `Your access expired on ${formattedDate}. Please renew to continue using tools.`,
+        icon: '/EasyCal/assets/images/logo.png',
+        tag: 'expiry-notification'
+      });
+    }
+  } else if (type === 'warning') {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('EasyCal Subscription Expiring Soon', {
+        body: `Your access will expire on ${formattedDate}. Please renew soon.`,
+        icon: '/EasyCal/assets/images/logo.png',
+        tag: 'expiry-warning'
+      });
+    }
+  }
+}
+
+// Add this to your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+  setupExpiryMonitoring();
+  
+  // Request notification permission
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission().then(permission => {
+      console.log('Notification permission:', permission);
+    });
+  }
 });
