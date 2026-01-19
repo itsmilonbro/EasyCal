@@ -1,248 +1,306 @@
-// EasyCal Service Worker with Tool Caching
-const CACHE_NAME = 'easycal-v2.0';
-const OFFLINE_URL = 'offline.html';
+// EasyCal Service Worker v2.0
+const CACHE_VERSION = 'easycal-v2.0';
+const OFFLINE_PAGE = './offline.html';
+const ERROR_PAGE = './tools/error.html';
 
-// Cache ALL essential files including tools
-const urlsToCache = [
+// Core assets to cache on install
+const CORE_ASSETS = [
   // Main Pages
-  '/EasyCal/',
-  '/EasyCal/index.html',
-  '/EasyCal/dashboard.html',
-  '/EasyCal/admin.html',
-  '/EasyCal/payment.html',
-  '/EasyCal/welcome.html',
+  './',
+  './index.html',
+  './dashboard.html',
+  './admin.html',
+  './payment.html',
+  './welcome.html',
   
   // CSS Files
-  '/EasyCal/css/style.css',
-  '/EasyCal/css/login.css',
-  '/EasyCal/css/dashboard.css',
-  '/EasyCal/css/admin.css',
-  '/EasyCal/css/payment.css',
+  './css/style.css',
+  './css/login.css',
+  './css/dashboard.css',
+  './css/admin.css',
+  './css/payment.css',
   
   // JavaScript Files
-  '/EasyCal/js/auth.js',
-  '/EasyCal/js/dashboard.js',
-  '/EasyCal/js/admin.js',
-  '/EasyCal/js/payment.js',
+  './js/auth.js',
+  './js/dashboard.js',
+  './js/admin.js',
+  './js/payment.js',
   
   // Assets
-  '/EasyCal/assets/images/logo.png',
-  '/EasyCal/assets/images/qr-code.png',
+  './assets/images/logo.png',
+  './assets/images/qr-code.png',
   
-  // Tool Pages - ADDING TOOLS FOLDER FILES
-  '/EasyCal/tools/construction/concrete-bricks.html',
-  '/EasyCal/tools/construction/flooring.html',
-  '/EasyCal/tools/construction/paint-estimate.html',
-  '/EasyCal/tools/construction/steel-reinforcement.html',
+  // Essential tool pages
+  './tools/construction/concrete-bricks.html',
+  './tools/construction/flooring.html',
+  './tools/construction/paint-estimate.html',
   
-  '/EasyCal/tools/timber/sawn-timber.html',
-  '/EasyCal/tools/timber/non-sawn.html',
-  '/EasyCal/tools/timber/wood-volume.html',
+  './tools/timber/sawn-timber.html',
+  './tools/timber/non-sawn.html',
   
-  '/EasyCal/tools/engineering/blank-tools.html',
+  './tools/engineering/blank-tools.html',
+  './tools/sawmills/blank-tools.html',
+  './tools/thai-glass/blank-tools.html',
   
-  '/EasyCal/tools/sawmills/blank-tools.html',
-  
-  '/EasyCal/tools/thai-glass/blank-tools.html'
+  // Fallback pages
+  OFFLINE_PAGE,
+  ERROR_PAGE
 ];
 
-// Dynamic caching for other tool pages as they're accessed
-const dynamicCacheName = 'easycal-tools-v1';
-
-// Install event - cache essential files
+// Install event - cache core assets
 self.addEventListener('install', event => {
+  console.log('[EasyCal SW] Installing service worker...');
+  
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches.open(CACHE_VERSION)
       .then(cache => {
-        console.log('EasyCal: Caching essential files and tools');
-        return cache.addAll(urlsToCache);
+        console.log('[EasyCal SW] Caching core assets');
+        return cache.addAll(CORE_ASSETS);
       })
-      .then(() => self.skipWaiting())
-  );
-});
-
-// Fetch event with smart caching strategy
-self.addEventListener('fetch', event => {
-  const requestUrl = new URL(event.request.url);
-  
-  // Skip non-GET requests and chrome-extension requests
-  if (event.request.method !== 'GET' || 
-      requestUrl.protocol === 'chrome-extension:') {
-    return;
-  }
-  
-  // Special handling for tool pages
-  if (requestUrl.pathname.includes('/tools/')) {
-    handleToolRequest(event);
-    return;
-  }
-  
-  // For other pages, use cache-first strategy
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        // Return cached response if available
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        
-        // Otherwise fetch from network
-        return fetch(event.request)
-          .then(response => {
-            // Don't cache if not a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clone the response for caching
-            const responseToCache = response.clone();
-            
-            // Cache in dynamic cache for tools, regular cache for others
-            const cacheToUse = requestUrl.pathname.includes('/tools/') 
-              ? dynamicCacheName 
-              : CACHE_NAME;
-            
-            caches.open(cacheToUse)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-                console.log('EasyCal: Cached new resource:', event.request.url);
-              });
-            
-            return response;
-          })
-          .catch(() => {
-            // If offline and page request, show offline page
-            if (event.request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL);
-            }
-            
-            // For other requests, return null
-            return null;
-          });
+      .then(() => {
+        console.log('[EasyCal SW] Installation complete');
+        return self.skipWaiting();
+      })
+      .catch(error => {
+        console.error('[EasyCal SW] Installation failed:', error);
       })
   );
-});
-
-// Special handler for tool requests
-function handleToolRequest(event) {
-  const requestUrl = event.request.url;
-  
-  event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        // If tool is cached, return it immediately (fastest)
-        if (cachedResponse) {
-          console.log('EasyCal: Serving cached tool:', requestUrl);
-          return cachedResponse;
-        }
-        
-        // If not cached, fetch from network
-        return fetch(event.request)
-          .then(response => {
-            // Don't cache if invalid response
-            if (!response || response.status !== 200) {
-              return response;
-            }
-            
-            // Clone response for caching
-            const responseToCache = response.clone();
-            
-            // Cache tool for future use
-            caches.open(dynamicCacheName)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-                console.log('EasyCal: Cached new tool:', requestUrl);
-              });
-            
-            return response;
-          })
-          .catch(error => {
-            console.error('EasyCal: Failed to fetch tool:', requestUrl, error);
-            
-            // If tool fails to load, show a friendly error page
-            return caches.match('/EasyCal/tools/error.html')
-              .then(errorPage => {
-                return errorPage || new Response(
-                  `<h1>Tool Offline</h1>
-                  <p>This calculation tool is not available offline.</p>
-                  <p>Please connect to the internet to access this tool.</p>`,
-                  { headers: { 'Content-Type': 'text/html' } }
-                );
-              });
-          });
-      })
-  );
-}
-
-// Background check for user expiry dates
-self.addEventListener('periodicsync', event => {
-  if (event.tag === 'check-expiry') {
-    event.waitUntil(checkExpiryDates());
-  }
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME, dynamicCacheName];
+  console.log('[EasyCal SW] Activating service worker...');
   
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            console.log('EasyCal: Deleting old cache:', cacheName);
+          if (cacheName !== CACHE_VERSION) {
+            console.log('[EasyCal SW] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     }).then(() => {
-      // Claim all clients immediately
+      console.log('[EasyCal SW] Activation complete');
       return self.clients.claim();
     })
   );
 });
 
-// Function to check expiry dates in background
-async function checkExpiryDates() {
-  const clients = await self.clients.matchAll();
+// Fetch event - smart caching strategy
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
   
+  // Skip non-GET requests and cross-origin requests
+  if (request.method !== 'GET' || !url.origin.startsWith(self.location.origin)) {
+    return;
+  }
+  
+  // Handle different types of requests
+  if (request.mode === 'navigate') {
+    // Handle page navigations
+    event.respondWith(handlePageRequest(request));
+  } else if (request.url.includes('/tools/')) {
+    // Handle tool requests
+    event.respondWith(handleToolRequest(request));
+  } else if (request.destination === 'image') {
+    // Handle images
+    event.respondWith(handleImageRequest(request));
+  } else if (request.url.includes('.css') || request.url.includes('.js')) {
+    // Handle CSS/JS files
+    event.respondWith(handleAssetRequest(request));
+  } else {
+    // Handle everything else
+    event.respondWith(handleDefaultRequest(request));
+  }
+});
+
+// Handle page navigation requests
+async function handlePageRequest(request) {
+  try {
+    // Try network first for pages
+    const networkResponse = await fetch(request);
+    
+    // Cache the response for future use
+    const cache = await caches.open(CACHE_VERSION);
+    await cache.put(request, networkResponse.clone());
+    
+    return networkResponse;
+  } catch (error) {
+    // Network failed, try cache
+    const cachedResponse = await caches.match(request);
+    
+    if (cachedResponse) {
+      console.log('[EasyCal SW] Serving page from cache:', request.url);
+      return cachedResponse;
+    }
+    
+    // No cache, show offline page
+    console.log('[EasyCal SW] Showing offline page for:', request.url);
+    return caches.match(OFFLINE_PAGE);
+  }
+}
+
+// Handle tool requests
+async function handleToolRequest(request) {
+  // Try cache first for tools (fastest)
+  const cachedResponse = await caches.match(request);
+  
+  if (cachedResponse) {
+    console.log('[EasyCal SW] Serving tool from cache:', request.url);
+    return cachedResponse;
+  }
+  
+  try {
+    // Not in cache, try network
+    const networkResponse = await fetch(request);
+    
+    // Cache for next time
+    const cache = await caches.open(CACHE_VERSION);
+    await cache.put(request, networkResponse.clone());
+    
+    console.log('[EasyCal SW] Cached new tool:', request.url);
+    return networkResponse;
+  } catch (error) {
+    // Network failed, show tool error page
+    console.error('[EasyCal SW] Tool fetch failed:', request.url, error);
+    return caches.match(ERROR_PAGE);
+  }
+}
+
+// Handle image requests
+async function handleImageRequest(request) {
+  // Cache first, then network for images
+  const cachedResponse = await caches.match(request);
+  
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    const cache = await caches.open(CACHE_VERSION);
+    await cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    // Return placeholder if image fails
+    return new Response(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">' +
+      '<rect width="100" height="100" fill="#f0f0f0"/>' +
+      '<text x="50" y="50" text-anchor="middle" dy=".3em" fill="#999" font-family="sans-serif">EasyCal</text>' +
+      '</svg>',
+      { headers: { 'Content-Type': 'image/svg+xml' } }
+    );
+  }
+}
+
+// Handle asset requests (CSS, JS)
+async function handleAssetRequest(request) {
+  // Cache first for assets
+  const cachedResponse = await caches.match(request);
+  
+  if (cachedResponse) {
+    // Update in background
+    updateCacheInBackground(request);
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    const cache = await caches.open(CACHE_VERSION);
+    await cache.put(request, networkResponse.clone());
+    return networkResponse;
+  } catch (error) {
+    // Return empty response for failed assets
+    return new Response('', { status: 404 });
+  }
+}
+
+// Handle default requests
+async function handleDefaultRequest(request) {
+  try {
+    const response = await fetch(request);
+    return response;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || new Response('Network error', { status: 408 });
+  }
+}
+
+// Update cache in background
+async function updateCacheInBackground(request) {
+  try {
+    const networkResponse = await fetch(request);
+    const cache = await caches.open(CACHE_VERSION);
+    await cache.put(request, networkResponse.clone());
+  } catch (error) {
+    // Silently fail - we have cached version
+  }
+}
+
+// Background sync for user data
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-user-data') {
+    event.waitUntil(syncUserData());
+  }
+});
+
+// Periodic background expiry checking
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'check-expiry-daily') {
+    event.waitUntil(checkUserExpiryBackground());
+  }
+});
+
+// Background functions
+async function syncUserData() {
+  const clients = await self.clients.matchAll();
   clients.forEach(client => {
-    // Send message to client to check expiry
     client.postMessage({
-      type: 'CHECK_EXPIRY',
+      type: 'SYNC_USER_DATA',
       timestamp: new Date().toISOString()
     });
   });
 }
 
-// Handle messages from the main app
+async function checkUserExpiryBackground() {
+  console.log('[EasyCal SW] Background expiry check');
+  
+  const clients = await self.clients.matchAll();
+  clients.forEach(client => {
+    client.postMessage({
+      type: 'CHECK_EXPIRY_BACKGROUND',
+      timestamp: new Date().toISOString()
+    });
+  });
+}
+
+// Handle messages from the app
 self.addEventListener('message', event => {
-  if (event.data.type === 'CACHE_TOOLS') {
-    // Cache specific tools on demand
-    cacheToolsOnDemand(event.data.tools);
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (event.data && event.data.type === 'CACHE_TOOLS') {
+    cacheTools(event.data.tools);
   }
 });
 
-// Cache tools on demand (when user accesses them)
-async function cacheToolsOnDemand(toolUrls) {
-  const cache = await caches.open(dynamicCacheName);
+// Cache specific tools on demand
+async function cacheTools(toolUrls) {
+  const cache = await caches.open(CACHE_VERSION);
   
-  toolUrls.forEach(async url => {
+  for (const url of toolUrls) {
     try {
       const response = await fetch(url);
       if (response.ok) {
         await cache.put(url, response);
-        console.log('EasyCal: Cached tool on demand:', url);
+        console.log('[EasyCal SW] Cached tool on demand:', url);
       }
     } catch (error) {
-      console.error('EasyCal: Failed to cache tool:', url, error);
+      console.error('[EasyCal SW] Failed to cache tool:', url, error);
     }
-  });
-}
-
-// Pre-cache tools when service worker is idle
-self.addEventListener('message', event => {
-  if (event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
   }
-});
+}
