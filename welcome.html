@@ -118,5 +118,23 @@
         
         <p><strong>Ready to start calculating?</strong> Choose a tool from the sidebar menu!</p>
     </div>
+
+    <!-- Your page content... -->
+    
+    <!-- Other scripts... -->
+    <script src="js/auth.js"></script> <!-- or dashboard.js, admin.js, etc. -->
+    
+    <!-- ✅ ADD SERVICE WORKER SCRIPT HERE -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        });
+    }
+    </script>
+ <!-- Right before this closing tag -->
+
 </body>
 </html>
