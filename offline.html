@@ -282,14 +282,13 @@
             window.location.reload();
         });
         
-        // Try to reload every 30 seconds
+        // Try to reload every 10 seconds
         setInterval(() => {
             if (navigator.onLine) {
                 window.location.reload();
             }
-        }, 30000);
-    </script>
-<script>
+        }, 10000);
+    
 // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
