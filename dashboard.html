@@ -6,6 +6,21 @@
     <title>EasyCal - Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
+<!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- iOS Safari Icons -->
+    <link rel="apple-touch-icon" href="./assets/icons/icon-152x152.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EasyCal">
+    
+    <!-- Android/Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./assets/icons/icon-512x512.png">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#667eea">
 </head>
 <body>
     <!-- Header -->
@@ -139,30 +154,38 @@
 <!-- JavaScript -->
 <!-- Old  <script src="js/dashboard.js"></script> -->
 
-<!-- Add this before closing </body> tag -->
 <script>
-// Register Service Worker
+// PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(registration => {
-        console.log('EasyCal: Service Worker registered with scope:', registration.scope);
-        
-        // Check for updates
-        registration.addEventListener('updatefound', () => {
-          const newWorker = registration.installing;
-          console.log('EasyCal: New Service Worker found');
-        });
-      })
-      .catch(error => {
-        console.log('EasyCal: Service Worker registration failed:', error);
-      });
-  });
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+            .then(function(registration) {
+                console.log('EasyCal: Service Worker registered with scope:', registration.scope);
+                
+                // Check for updates
+                registration.addEventListener('updatefound', function() {
+                    const newWorker = registration.installing;
+                    console.log('EasyCal: New Service Worker found, installing...');
+                    
+                    newWorker.addEventListener('statechange', function() {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('EasyCal: New content available, please refresh.');
+                            // You could show a "Update available" notification here
+                        }
+                    });
+                });
+            })
+            .catch(function(error) {
+                console.log('EasyCal: Service Worker registration failed:', error);
+            });
+    });
 }
 
 // Request notification permission
 if ('Notification' in window && Notification.permission === 'default') {
-  Notification.requestPermission();
+    Notification.requestPermission().then(function(permission) {
+        console.log('EasyCal: Notification permission:', permission);
+    });
 }
 </script>
 
