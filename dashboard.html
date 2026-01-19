@@ -138,5 +138,33 @@
     <script type="module" src="js/dashboard.js"></script>
 <!-- JavaScript -->
 <!-- Old  <script src="js/dashboard.js"></script> -->
+
+<!-- Add this before closing </body> tag -->
+<script>
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('EasyCal: Service Worker registered with scope:', registration.scope);
+        
+        // Check for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          console.log('EasyCal: New Service Worker found');
+        });
+      })
+      .catch(error => {
+        console.log('EasyCal: Service Worker registration failed:', error);
+      });
+  });
+}
+
+// Request notification permission
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+</script>
+
 </body>
                                   </html>
