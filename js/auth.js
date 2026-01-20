@@ -34,12 +34,12 @@ export const defaultUsers = [
     },
     {
         id: '4',
-        phone: '01955255077',
+        phone: '01400115520',
         password: '12345',
-        name: 'Manual User -ID 4- Manual Auth.js',
+        name: 'Manager Profile',
         role: 'user',
-        expiryDate: '2030-12-31',
-        customLink: 'manual user link customLink',
+        expiryDate: '2026-01-24',
+        customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
         loginHistory: []
     },
     {
@@ -160,7 +160,7 @@ function loginUser(phone, password) {
     
     if (user.password !== password) {
         console.log('Invalid password for user:', user.name);
-        throw new Error('⛔ Password wrong -Check your Password');
+        throw new Error('⛔ Password Incorrect ⁉️');
     }
     
     // Check if user is expired
@@ -305,7 +305,7 @@ localStorage.setItem('easycal_users', JSON.stringify(users));
             passwordInput.value = '1234';
         }
         if (urlParams.get('demo') === 'admin') {
-            phoneInput.value = '01955255065';
+            phoneInput.value = '0123456789';
             passwordInput.value = '1234';
         }
     }
@@ -378,7 +378,7 @@ function showExpiryNotification(type, expiryDate) {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('EasyCal Subscription Expired', {
         body: `Your access expired on ${formattedDate}. Please renew to continue using tools.`,
-        icon: '/EasyCal/assets/images/logo.png',
+        icon: './EasyCal/assets/images/logo.png',
         tag: 'expiry-notification'
       });
     }
@@ -386,7 +386,7 @@ function showExpiryNotification(type, expiryDate) {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification('EasyCal Subscription Expiring Soon', {
         body: `Your access will expire on ${formattedDate}. Please renew soon.`,
-        icon: '/EasyCal/assets/images/logo.png',
+        icon: './EasyCal/assets/images/logo.png',
         tag: 'expiry-warning'
       });
     }
