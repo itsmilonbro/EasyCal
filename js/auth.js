@@ -38,7 +38,7 @@ export const defaultUsers = [
         password: '12345',
         name: 'Manager Profile',
         role: 'user',
-        expiryDate: '2026-01-24',
+        expiryDate: '2026-12-31',
         customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
         loginHistory: []
     },
