@@ -1,0 +1,283 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="soot to mm to inches Convert directly | instantly Convert Online | EasyCal WebApp - v2.0 -Calculate Easy to only put your number, automatic convert to others unit">
+
+<title>Soot to mm to inches Converter | EasyCal</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* HEADER */
+header {
+  padding: 16px;
+  text-align: center;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(10px);
+  animation: slideDown 0.8s ease;
+}
+
+header h1 {
+  font-size: 22px;
+}
+
+header p {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* MAIN */
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+/* APP CARD */
+.app-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 22px;
+  padding: 25px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+  animation: fadeUp 1s ease;
+}
+
+.app-card h2 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.app-card p {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+/* INPUT GROUP */
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  background: rgba(255,255,255,0.22);
+  box-shadow: 0 0 0 2px rgba(0,255,255,0.4);
+  transform: scale(1.02);
+}
+
+input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+/* BUTTON BAR */
+.button-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+button {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reset-btn {
+  background: rgba(255,0,0,0.2);
+  color: #fff;
+}
+
+.reset-btn:hover {
+  background: rgba(255,0,0,0.35);
+}
+
+.reset-btn:active {
+  transform: scale(0.95);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.25);
+  opacity: 0.85;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MOBILE FEEL */
+@media (max-width: 480px) {
+  .app-card {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  header h1 {
+    font-size: 20px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>soot mm to inches Convert</h1>
+  <p>Tools by EasyCal - v2.0</p>
+</header>
+
+<main>
+
+<div class="app-card">
+
+  <h2>Soot - mm - Inch Converter</h2>
+  <p>Instant and Accurate Measurement Converter</p>
+
+  <div class="input-group">
+    <label>Soot</label>
+    <input id="soot" type="number" step="any" placeholder="Enter Soot">
+  </div>
+
+  <div class="input-group">
+    <label>Millimeters (mm)</label>
+    <input id="mm" type="number" step="any" placeholder="Enter mm">
+  </div>
+
+  <div class="input-group">
+    <label>Inches (inch)</label>
+    <input id="inch" type="number" step="any" placeholder="Enter inch">
+  </div>
+
+  <div class="button-bar">
+    <button class="reset-btn" onclick="resetAll()">Reset</button>
+  </div>
+
+</div>
+
+</main>
+
+<footer>
+© 2026 EasyCal - v 2.0 | Smart Construction Tools | Freelancer Milon
+</footer>
+
+<script>
+const sootInput = document.getElementById('soot');
+const mmInput = document.getElementById('mm');
+const inchInput = document.getElementById('inch');
+
+function updateFromSoot() {
+  let soot = parseFloat(sootInput.value);
+  if (isNaN(soot)) {
+    mmInput.value = '';
+    inchInput.value = '';
+    return;
+  }
+  mmInput.value = (soot * 3.175).toFixed(3);
+  inchInput.value = (soot * 0.125).toFixed(3);
+}
+
+function updateFromMM() {
+  let mm = parseFloat(mmInput.value);
+  if (isNaN(mm)) {
+    sootInput.value = '';
+    inchInput.value = '';
+    return;
+  }
+  sootInput.value = (mm * 0.315).toFixed(3);
+  inchInput.value = (mm / 25.4).toFixed(3);
+}
+
+function updateFromInch() {
+  let inch = parseFloat(inchInput.value);
+  if (isNaN(inch)) {
+    sootInput.value = '';
+    mmInput.value = '';
+    return;
+  }
+  sootInput.value = (inch * 8).toFixed(3);
+  mmInput.value = (inch * 25.4).toFixed(3);
+}
+
+function resetAll() {
+  sootInput.value = '';
+  mmInput.value = '';
+  inchInput.value = '';
+}
+
+sootInput.addEventListener('input', updateFromSoot);
+mmInput.addEventListener('input', updateFromMM);
+inchInput.addEventListener('input', updateFromInch);
+</script>
+
+</body>
+</html>
