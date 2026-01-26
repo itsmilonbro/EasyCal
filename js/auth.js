@@ -108,7 +108,7 @@ function hideLoading() {
 }
 
 function validatePhone(phone) {
-    const phoneRegex = /^[0-9]{10,11}$/;
+    const phoneRegex = /^[0-9]{11}$/;
     return phoneRegex.test(phone);
 }
 
@@ -318,9 +318,9 @@ function setupExpiryMonitoring() {
   // Check expiry on page load
   checkCurrentUserExpiry();
   
-  // Check every hour
-  setInterval(checkCurrentUserExpiry, 60 * 60 * 1000);
-  
+  // Runs every 36 hours
+setInterval(checkCurrentUserExpiry, 36 * 60 * 60 * 1000);
+
   // Listen for service worker messages
   if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
     navigator.serviceWorker.addEventListener('message', event => {
