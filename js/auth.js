@@ -71,6 +71,16 @@ export const defaultUsers = [
         expiryDate: '2026-01-15',
         customLink: 'https://tally.pe/bBtgL',
         loginHistory: []
+    },
+    {
+        id: '8',
+        phone: '01567831802',
+        password: '12345',
+        name: 'Kawsar',
+        role: 'user',
+        expiryDate: '2026-02-15',
+        customLink: 'https://',
+        loginHistory: []
     }
 ];
 
