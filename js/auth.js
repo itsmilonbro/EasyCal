@@ -81,6 +81,16 @@ export const defaultUsers = [
         expiryDate: '2026-02-15',
         customLink: 'https://',
         loginHistory: []
+    },
+{
+        id: '9',
+        phone: '00000000000',
+        password: '12345',
+        name: 'Local Customer Profile',
+        role: 'user',
+        expiryDate: '2026-02-28',
+        customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
+        loginHistory: []
     }
 ];
 
