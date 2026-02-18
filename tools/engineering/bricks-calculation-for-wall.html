@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>EasyCal · Bricks calculator (wall)</title>
+  <!-- Poppins font (clean, professional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- Fontawesome 6 (free) for subtle icons, optional but adds polish -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #0f1218;  /* deep dark background */
+      color: #e9edf2;
+      line-height: 1.5;
+      padding: 20px 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* main card – light‑dark theme, elevated */
+    .easycal-card {
+      max-width: 1100px;
+      width: 100%;
+      background: #1a1e26;          /* dark card surface */
+      border-radius: 32px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      backdrop-filter: blur(2px);
+      transition: all 0.2s ease;
+    }
+
+    /* header area with EasyCal identity */
+    .brand-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      border-bottom: 1px solid #2f3540;
+      padding-bottom: 16px;
+    }
+
+    .logo-easycal {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-easycal i {
+      font-size: 2rem;
+      color: #b9e65c;        /* fresh accent – lime */
+      background: #2c3a2b;
+      padding: 10px;
+      border-radius: 18px;
+    }
+
+    .logo-easycal h1 {
+      font-weight: 600;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      color: white;
+    }
+
+    .logo-easycal span {
+      color: #b9e65c;
+      font-weight: 300;
+      margin-left: 4px;
+      font-size: 1rem;
+      background: #2b312b;
+      padding: 2px 12px;
+      border-radius: 40px;
+      align-self: center;
+    }
+
+    .lang-toggle {
+      display: flex;
+      gap: 8px;
+      background: #262c36;
+      padding: 4px;
+      border-radius: 60px;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: #9aa5b5;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lang-btn.active {
+      background: #b9e65c;
+      color: #0f1218;
+      box-shadow: 0 4px 8px rgba(185, 230, 92, 0.2);
+    }
+
+    /* professional title */
+    .tool-title {
+      margin-bottom: 24px;
+    }
+
+    .tool-title h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tool-title h2 i {
+      color: #b9e65c;
+      font-size: 2rem;
+    }
+
+    .tool-title p {
+      color: #a2aebb;
+      font-size: 1rem;
+      margin-top: 6px;
+    }
+
+    /* calculator grid – inputs */
+    .calc-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin: 36px 0 20px;
+    }
+
+    .row-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* input group: label + 50/50 layout */
+    .input-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-block label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #b0c0d0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-block label i {
+      color: #b9e65c;
+      font-size: 0.9rem;
+      width: 18px;
+    }
+
+    .dual-control {
+      display: flex;
+      width: 100%;
+      background: #0f131b;
+      border-radius: 20px;
+      border: 1px solid #2f3744;
+      overflow: hidden;
+      transition: 0.15s;
+    }
+
+    .dual-control:focus-within {
+      border-color: #b9e65c;
+      box-shadow: 0 0 0 3px rgba(185, 230, 92, 0.15);
+    }
+
+    .dual-control input {
+      flex: 1 1 50%;            /* exactly 50% of parent width */
+      width: 50%;
+      background: #0f131b;
+      border: none;
+      padding: 16px 18px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      outline: none;
+      font-family: 'Inter', monospace;
+    }
+
+    .dual-control input::placeholder {
+      color: #4b5565;
+      font-weight: 400;
+    }
+
+    .dual-control select {
+      flex: 1 1 50%;            /* other 50% */
+      width: 50%;
+      background: #1e2530;
+      border: none;
+      padding: 16px 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #e0e7ef;
+      outline: none;
+      cursor: pointer;
+      border-left: 1px solid #2f3848;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23b9e65c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+    }
+
+    /* option style inside select */
+    .dual-control select option {
+      background: #1a1e26;
+      color: #eef3fa;
+    }
+
+    /* button row */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin: 28px 0 16px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      border: none;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2f3642;
+      color: #dae2ec;
+    }
+
+    .btn-primary {
+      background: #b9e65c;
+      color: #0d121b;
+      box-shadow: 0 6px 14px rgba(185, 230, 92, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #c9f06b;
+      transform: scale(1.02);
+    }
+
+    .btn-secondary:hover {
+      background: #3f485a;
+      color: white;
+    }
+
+    .result-panel {
+      background: #0e121b;
+      border-radius: 24px;
+      padding: 24px 28px;
+      border: 1px solid #2a313e;
+      margin: 16px 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .result-panel .label {
+      font-size: 1rem;
+      color: #a4b3c9;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .result-panel .value {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #b9e65c;
+      line-height: 1.1;
+    }
+
+    .result-panel .unit-note {
+      color: #6c7a92;
+      font-size: 0.9rem;
+    }
+
+    /* method / description section */
+    .content-section {
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .method-box, .faq-box {
+      background: #131821;
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid #293040;
+    }
+
+    .method-box h3, .faq-box h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: white;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      color: #cbd5e3;
+    }
+
+    .step-marker {
+      background: #b9e65c20;
+      color: #b9e65c;
+      font-weight: 700;
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      border: 1px solid #4c6633;
+    }
+
+    .faq-item {
+      margin-bottom: 20px;
+    }
+
+    .faq-question {
+      font-weight: 600;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .faq-answer {
+      color: #a0adc2;
+      font-size: 0.95rem;
+      padding-left: 10px;
+      border-left: 2px solid #b9e65c;
+    }
+
+    /* bangla / english friendly wording */
+    .bangla-text {
+      font-size: 1.05rem;
+      word-spacing: 2px;
+    }
+
+    .fine-print {
+      margin-top: 32px;
+      text-align: center;
+      color: #5b697f;
+      font-size: 0.85rem;
+    }
+
+    hr {
+      border: 0.5px solid #2a3140;
+      margin: 24px 0 10px;
+    }
+
+    /* mobile perfect */
+    @media (max-width: 700px) {
+      .easycal-card { padding: 24px 16px; }
+      .row-duo { grid-template-columns: 1fr; gap: 16px; }
+      .brand-bar { flex-direction: column; align-items: start; gap: 15px; }
+      .content-section { grid-template-columns: 1fr; }
+      .result-panel .value { font-size: 2.2rem; }
+      .dual-control input, .dual-control select { padding: 14px 12px; }
+    }
+
+    @media (max-width: 420px) {
+      .btn-group { flex-direction: column; width: 100%; }
+      .btn { justify-content: center; }
+    }
+
+    /* extra touch: remove spinners */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] { -moz-appearance: textfield; }
+  </style>
+</head>
+<body>
+<div class="easycal-card">
+
+  <!-- brand & language toggle (bangla/english) refined wording -->
+  <div class="brand-bar">
+    <div class="logo-easycal">
+      <i class="fas fa-calculator"></i>
+      <h1>EasyCal<span>Bricks</span></h1>
+    </div>
+    <div class="lang-toggle" id="langToggle">
+      <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+      <button class="lang-btn" data-lang="bn">🇧🇩 বাংলা</button>
+    </div>
+  </div>
+
+  <!-- main title -->
+  <div class="tool-title">
+    <h2><i class="fas fa-cube"></i> <span data-i18n="title">Bricks calculator (wall)</span></h2>
+    <p data-i18n="subtitle">Precise estimate · mortar & waste included</p>
+  </div>
+
+  <!-- calculator grid with 50/50 input+select design -->
+  <div class="calc-grid">
+    <!-- row 1 -->
+    <div class="row-duo">
+      <!-- wall length -->
+      <div class="input-block">
+        <label><i class="fas fa-arrows-left-right"></i> <span data-i18n="wallLength">Wall length</span></label>
+        <div class="dual-control">
+          <input type="number" id="length" placeholder="0.00" value="10" step="any">
+          <select id="lengthUnit">
+            <option value="meters">meter (m)</option>
+            <option value="feet" selected>feet (ft)</option>
+            <option value="centimeters">cm</option>
+            <option value="inches">inch</option>
+          </select>
+        </div>
+      </div>
+      <!-- wall depth (height) -->
+      <div class="input-block">
+        <label><i class="fas fa-arrows-up-down"></i> <span data-i18n="wallDepth">Wall height</span></label>
+        <div class="dual-control">
+          <input type="number" id="depth" placeholder="0.00" value="8" step="any">
+          <select id="depthUnit">
+            <option value="meters">meter (m)</option>
+            <option value="feet" selected>feet (ft)</option>
+            <option value="centimeters">cm</option>
+            <option value="inches">inch</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 2 -->
+    <div class="row-duo">
+      <!-- wall thickness -->
+      <div class="input-block">
+        <label><i class="fas fa-th-large"></i> <span data-i18n="wallThick">Wall thickness</span></label>
+        <div class="dual-control">
+          <input type="number" id="wallThickness" placeholder="0.00" value="0.5" step="any">
+          <select id="wallThicknessUnit">
+            <option value="meters">meter (m)</option>
+            <option value="feet" selected>feet (ft)</option>
+            <option value="centimeters">cm</option>
+            <option value="inches">inch</option>
+          </select>
+        </div>
+      </div>
+      <!-- brick length -->
+      <div class="input-block">
+        <label><i class="fas fa-cube"></i> <span data-i18n="brickLen">Brick length</span></label>
+        <div class="dual-control">
+          <input type="number" id="brickLength" placeholder="0.00" value="9" step="any">
+          <select id="brickLengthUnit">
+            <option value="inches" selected>inch (in)</option>
+            <option value="meters">meter</option>
+            <option value="centimeters">cm</option>
+            <option value="feet">feet</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 3 -->
+    <div class="row-duo">
+      <!-- brick width -->
+      <div class="input-block">
+        <label><i class="fas fa-cube"></i> <span data-i18n="brickWidth">Brick width</span></label>
+        <div class="dual-control">
+          <input type="number" id="brickWidth" placeholder="0.00" value="4.5" step="any">
+          <select id="brickWidthUnit">
+            <option value="inches" selected>inch (in)</option>
+            <option value="meters">meter</option>
+            <option value="centimeters">cm</option>
+            <option value="feet">feet</option>
+          </select>
+        </div>
+      </div>
+      <!-- brick height -->
+      <div class="input-block">
+        <label><i class="fas fa-cube"></i> <span data-i18n="brickHeight">Brick height</span></label>
+        <div class="dual-control">
+          <input type="number" id="brickHeight" placeholder="0.00" value="3" step="any">
+          <select id="brickHeightUnit">
+            <option value="inches" selected>inch (in)</option>
+            <option value="meters">meter</option>
+            <option value="centimeters">cm</option>
+            <option value="feet">feet</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- action buttons -->
+  <div class="action-bar">
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="resetInputs()"><i class="fas fa-undo-alt"></i> <span data-i18n="reset">Reset</span></button>
+      <button class="btn btn-primary" onclick="calculateBricks()"><i class="fas fa-calculator"></i> <span data-i18n="calc">Calculate</span></button>
+    </div>
+    <div class="btn-group">
+      <!-- extra note: 5% waste & mortar included automatically -->
+    </div>
+  </div>
+
+  <!-- result panel -->
+  <div class="result-panel" id="resultPanel">
+    <span class="label" data-i18n="bricksNeeded">🧱 BRICKS NEEDED (approx)</span>
+    <div style="display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;">
+      <span class="value" id="resultValue">0</span>
+      <span class="unit-note" data-i18n="includeWaste">incl. 5% waste & mortar</span>
+    </div>
+  </div>
+
+  <!-- method & FAQ (clean professional) -->
+  <div class="content-section">
+    <!-- left: method (updated bangla tone also good) -->
+    <div class="method-box">
+      <h3><i class="fas fa-draw-polygon" style="color:#b9e65c;"></i> <span data-i18n="methodTitle">step‑by‑step (brick quantity)</span></h3>
+      <div class="step-item"><span class="step-marker">1</span> <span data-i18n="step1">Brick size: 9"×4.5"×3" (standard)</span></div>
+      <div class="step-item"><span class="step-marker">2</span> <span data-i18n="step2">Convert to feet → 0.75×0.375×0.25 ft</span></div>
+      <div class="step-item"><span class="step-marker">3</span> <span data-i18n="step3">Volume of one brick = 0.0703 ft³</span></div>
+      <div class="step-item"><span class="step-marker">4</span> <span data-i18n="step4">Bricks per ft³ ≈ 14.2 (without mortar)</span></div>
+      <div class="step-item"><span class="step-marker">5</span> <span data-i18n="step5">10% mortar deduction → ~12.85 bricks</span></div>
+      <div class="step-item"><span class="step-marker">6</span> <span data-i18n="step6">Add 5% waste → total ≈ 13.5 bricks/ft³</span></div>
+      <div class="step-item"><span class="step-marker">7</span> <span data-i18n="step7">Wall volume × 13.5 = final estimate</span></div>
+    </div>
+    <!-- right: FAQ (bangla/english fine) -->
+    <div class="faq-box">
+      <h3><i class="fas fa-question-circle" style="color:#b9e65c;"></i> <span data-i18n="faqTitle">quick FAQ</span></h3>
+      <div class="faq-item">
+        <div class="faq-question" data-i18n="faq1q">🏠 bricks for 1000 sq ft house?</div>
+        <div class="faq-answer" data-i18n="faq1a">approx 25k–30k bricks (plan area).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-i18n="faq2q">🧰 cement bags per 1000 bricks?</div>
+        <div class="faq-answer" data-i18n="faq2a">~5‑6 bags (standard mortar).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-i18n="faq3q">📐 bricks in 1 m³ ?</div>
+        <div class="faq-answer" data-i18n="faq3a">around 500 (9×4.5×3 inch brick).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-i18n="faq4q">🔨 2‑bedroom house bricks?</div>
+        <div class="faq-answer" data-i18n="faq4a">typically 20,000‑25,000 bricks.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- simple author note (light dark) -->
+  <hr>
+  <div style="display: flex; justify-content: space-between; color:#6d7b92; font-size:0.9rem; flex-wrap:wrap;">
+    <span><i class="far fa-user-circle"></i> EasyCal · engineered for precision</span>
+    <span data-i18n="footerNote">🕒 updated 2026 · v2.1</span>
+  </div>
+</div>
+
+<!-- hidden i18n mapping (english + refined bangla tone) -->
+<script>
+  // ---------- calculator logic (mortar & waste included: -10% mortar volume +5% waste) ----------
+  function convertToMeters(value, unit) {
+    switch (unit) {
+      case 'meters': return value;
+      case 'centimeters': return value / 100;
+      case 'feet': return value * 0.3048;
+      case 'inches': return value * 0.0254;
+      default: return value;
+    }
+  }
+
+  function calculateBricks() {
+    const length = parseFloat(document.getElementById('length').value) || 0;
+    const depth = parseFloat(document.getElementById('depth').value) || 0;
+    const wallThickness = parseFloat(document.getElementById('wallThickness').value) || 0;
+    const brickL = parseFloat(document.getElementById('brickLength').value) || 0;
+    const brickW = parseFloat(document.getElementById('brickWidth').value) || 0;
+    const brickH = parseFloat(document.getElementById('brickHeight').value) || 0;
+
+    if (length <= 0 || depth <= 0 || wallThickness <= 0 || brickL <= 0 || brickW <= 0 || brickH <= 0) {
+      document.getElementById('resultValue').innerText = '?';
+      alert('Please fill all fields with positive numbers.');
+      return;
+    }
+
+    const lengthUnit = document.getElementById('lengthUnit').value;
+    const depthUnit = document.getElementById('depthUnit').value;
+    const thickUnit = document.getElementById('wallThicknessUnit').value;
+    const brickLUnit = document.getElementById('brickLengthUnit').value;
+    const brickWUnit = document.getElementById('brickWidthUnit').value;
+    const brickHUnit = document.getElementById('brickHeightUnit').value;
+
+    // convert everything to meters
+    const Lm = convertToMeters(length, lengthUnit);
+    const Dm = convertToMeters(depth, depthUnit);
+    const Tm = convertToMeters(wallThickness, thickUnit);
+    const BLm = convertToMeters(brickL, brickLUnit);
+    const BWm = convertToMeters(brickW, brickWUnit);
+    const BHm = convertToMeters(brickH, brickHUnit);
+
+    const wallVol = Lm * Dm * Tm;               // m³
+    const brickVol = BLm * BWm * BHm;            // m³
+
+    if (brickVol <= 0) { document.getElementById('resultValue').innerText = '0'; return; }
+
+    let rawBricks = wallVol / brickVol;
+
+    // subtract 10% mortar volume (only 90% bricks volume) → rawBricks * 0.9 / 1? easier: bricks after mortar = rawBricks * 0.9 (since mortar occupies 10% of wall volume)
+    let afterMortar = rawBricks * 0.9;   // 10% mortar
+    // add 5% waste
+    let total = afterMortar * 1.05;
+
+    let rounded = Math.ceil(total);  // better to round up for construction
+
+    document.getElementById('resultValue').innerText = rounded.toLocaleString();
+  }
+
+  function resetInputs() {
+    document.getElementById('length').value = '0';
+    document.getElementById('depth').value = '0';
+    document.getElementById('wallThickness').value = '4.5';
+    document.getElementById('brickLength').value = '9';
+    document.getElementById('brickWidth').value = '4.5';
+    document.getElementById('brickHeight').value = '3';
+    document.getElementById('lengthUnit').value = 'feet';
+    document.getElementById('depthUnit').value = 'feet';
+    document.getElementById('wallThicknessUnit').value = 'inches';
+    document.getElementById('brickLengthUnit').value = 'inches';
+    document.getElementById('brickWidthUnit').value = 'inches';
+    document.getElementById('brickHeightUnit').value = 'inches';
+    document.getElementById('resultValue').innerText = '0';
+  }
+
+  // ---------- language toggle (english / bangla) with polished wording ----------
+  const translations = {
+    en: {
+      title: 'Bricks calculator (wall)',
+      subtitle: 'Precise estimate · mortar & waste included',
+      wallLength: 'Wall length',
+      wallDepth: 'Wall height',
+      wallThick: 'Wall thickness',
+      brickLen: 'Brick length',
+      brickWidth: 'Brick width',
+      brickHeight: 'Brick height',
+      reset: 'Reset',
+      calc: 'Calculate',
+      bricksNeeded: '🧱 BRICKS NEEDED (approx)',
+      includeWaste: 'incl. 5% waste & mortar',
+      methodTitle: 'step‑by‑step (brick quantity)',
+      step1: 'Brick size: 9"×4.5"×3" (standard)',
+      step2: 'Convert to feet → 0.75×0.375×0.25 ft',
+      step3: 'Volume of one brick = 0.0703 ft³',
+      step4: 'Bricks per ft³ ≈ 14.2 (without mortar)',
+      step5: '10% mortar deduction → ~12.85 bricks',
+      step6: 'Add 5% waste → total ≈ 13.5 bricks/ft³',
+      step7: 'Wall volume × 13.5 = final estimate',
+      faqTitle: 'quick FAQ',
+      faq1q: '🏠 bricks for 1000 sq ft house?',
+      faq1a: 'approx 25k–30k bricks (plan area).',
+      faq2q: '🧰 cement bags per 1000 bricks?',
+      faq2a: '~5‑6 bags (standard mortar).',
+      faq3q: '📐 bricks in 1 m³ ?',
+      faq3a: 'around 500 (9×4.5×3 inch brick).',
+      faq4q: '🔨 2‑bedroom house bricks?',
+      faq4a: 'typically 20,000‑25,000 bricks.',
+      footerNote: '🕒 updated 2026 · v2.1'
+    },
+    bn: {
+      title: 'ইট গণনা (দেয়াল)',
+      subtitle: 'নির্ভুল হিসাব · মর্টার ও অপচয় সহ',
+      wallLength: 'দেয়ালের দৈর্ঘ্য',
+      wallDepth: 'দেয়ালের উচ্চতা',
+      wallThick: 'দেয়ালের পুরুত্ব',
+      brickLen: 'ইটের দৈর্ঘ্য',
+      brickWidth: 'ইটের প্রস্থ',
+      brickHeight: 'ইটের উচ্চতা',
+      reset: 'রিসেট',
+      calc: 'গণনা',
+      bricksNeeded: '🧱 প্রায় ইট লাগবে',
+      includeWaste: '৫% অপচয় ও মর্টার সহ',
+      methodTitle: 'পদ্ধতি (ইট সংখ্যা)',
+      step1: 'ইটের মাপ: ৯"×৪.৫"×৩" (স্ট্যান্ডার্ড)',
+      step2: 'ফুটে রূপান্তর → ০.৭৫×০.৩৭৫×০.২৫ ফুট',
+      step3: 'এক ইটের আয়তন = ০.০৭০৩ ft³',
+      step4: 'প্রতি ft³‑এ ইট ≈ ১৪.২ (মর্টার ছাড়া)',
+      step5: '১০% মর্টার বাদ দিলে → ~১২.৮৫টি',
+      step6: '৫% অপচয় যোগ → সর্বমোট ≈ ১৩.৫টি/ft³',
+      step7: 'দেয়ালের আয়তন × ১৩.৫ = চূড়ান্ত',
+      faqTitle: 'দ্রুত জিজ্ঞাসা',
+      faq1q: '🏠 ১০০০ ft² বাড়িতে কত ইট?',
+      faq1a: 'আনু. ২৫-৩০ হাজার (প্ল্যান এরিয়া)',
+      faq2q: '🧰 ১০০০ ইটে সিমেন্টের বস্তা?',
+      faq2a: '~৫-৬ বস্তা (স্বাভাবিক মর্টার)',
+      faq3q: '📐 ১ ঘনমিটারে ইট কত?',
+      faq3a: 'প্রায় ৫০০টি (৯×৪.৫×৩ ইঞ্চি)',
+      faq4q: '🔨 ২ বেডরুম বাড়িতে ইট?',
+      faq4a: 'সাধারণত ২০,০০০-২৫,০০০টি',
+      footerNote: '🕒 ২০২৬ · v২.১'
+    }
+  };
+
+  function setLanguage(lang) {
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (translations[lang] && translations[lang][key]) {
+        el.innerText = translations[lang][key];
+      }
+    });
+    // toggle button active style
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+  }
+
+  document.getElementById('langToggle').addEventListener('click', (e) => {
+    if (e.target.classList.contains('lang-btn')) {
+      const lang = e.target.dataset.lang;
+      setLanguage(lang);
+    }
+  });
+
+  // set default english
+  window.onload = function() {
+    setLanguage('en');
+    calculateBricks();  // initial demo
+  };
+</script>
+<!-- ensure result shows on load -->
+</body>
+</html>
