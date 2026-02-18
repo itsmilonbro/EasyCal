@@ -39,8 +39,14 @@ const CORE_ASSETS = [
   './tools/timber/non-sawn.html',
   
   './tools/engineering/blank-tools.html',
+  './tools/engineering/soot-mm-inches-converter.html',
+
+
   './tools/sawmills/blank-tools.html',
+
   './tools/thai-glass/blank-tools.html',
+
+
   
   // Fallback pages
   OFFLINE_PAGE,
