@@ -84,14 +84,15 @@ export const defaultUsers = [
     },
 {
         id: '9',
-        phone: '00000000000',
+        phone: '01819393055',
         password: '12345',
-        name: 'Local Customer Profile',
+        name: 'Faisal Enterprise',
         role: 'user',
-        expiryDate: '2026-02-28',
+        expiryDate: '2026-03-28',
         customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
         loginHistory: []
     }
+
 ];
 
 // Utility Functions
