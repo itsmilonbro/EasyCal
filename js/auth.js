@@ -88,7 +88,7 @@ export const defaultUsers = [
         password: '12345',
         name: 'Faisal Enterprise',
         role: 'user',
-        expiryDate: '2026-06-30',
+        expiryDate: '2026-08-30',
         customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
         loginHistory: []
     }
