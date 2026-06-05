@@ -91,6 +91,17 @@ export const defaultUsers = [
         expiryDate: '2026-08-30',
         customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
         loginHistory: []
+    },
+
+{
+        id: '10',
+        phone: '01714603247',
+        password: '12345',
+        name: 'Jahangir Gazi',
+        role: 'user',
+        expiryDate: '2026-12-30',
+        customLink: 'https://almadinatraders-savar.blogspot.com/p/payment.html',
+        loginHistory: []
     }
 
 ];
